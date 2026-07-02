@@ -1,0 +1,350 @@
+/* =========================================================
+   style.css — base styles
+   Minimal, typography-led portfolio.
+   ========================================================= */
+
+:root {
+  --bg: #E1DCC9;
+  --text: #000000;
+  --accent: #1F150C;
+  --secondary: #412D15;
+
+  --font-heading: 'Forum', serif;
+  --font-body: 'Raleway', sans-serif;
+
+  --max-width: 780px;
+  --gutter: 32px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+a:hover,
+a:focus-visible {
+  border-bottom-color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 1px solid var(--secondary);
+  outline-offset: 3px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+  margin: 0 0 0.5em 0;
+}
+
+h1 {
+  font-size: 2.6rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+p {
+  margin: 0 0 1.2em 0;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------- Header / Nav ---------- */
+
+.site-header {
+  border-bottom: 1px solid rgba(65, 45, 21, 0.25);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28px;
+  padding-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.site-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  border-bottom: none;
+}
+
+.site-title:hover {
+  border-bottom: none;
+  opacity: 0.75;
+}
+
+.site-nav {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  border-bottom: none;
+  padding-bottom: 2px;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--secondary);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- Main / sections ---------- */
+
+main {
+  padding-top: 72px;
+  padding-bottom: 96px;
+}
+
+.section {
+  margin-bottom: 72px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 0.9em;
+}
+
+.lede {
+  font-size: 1.05rem;
+  color: var(--secondary);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(65, 45, 21, 0.25);
+  margin: 72px 0;
+}
+
+/* ---------- Home ---------- */
+
+.hero h1 {
+  margin-bottom: 0.3em;
+}
+
+.hero .role-line {
+  font-size: 0.95rem;
+  color: var(--secondary);
+  letter-spacing: 0.02em;
+}
+
+.hero .role-line .sep {
+  color: rgba(65, 45, 21, 0.5);
+  margin: 0 0.5em;
+}
+
+/* ---------- Project cards ---------- */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+.project-card {
+  border-top: 1px solid rgba(65, 45, 21, 0.25);
+  padding-top: 28px;
+}
+
+.project-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 20px;
+  border: 1px solid rgba(65, 45, 21, 0.25);
+}
+
+.project-card h3 {
+  margin-bottom: 0.4em;
+}
+
+.project-card .project-desc {
+  margin-bottom: 0.9em;
+}
+
+.project-card .project-tech {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 1em;
+}
+
+.btn {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 9px 18px;
+  border-bottom: 1px solid var(--accent);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background-color: var(--accent);
+  color: var(--bg);
+  border-bottom-color: var(--accent);
+}
+
+.view-all {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Links row (Home) ---------- */
+
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link-row a {
+  font-size: 0.95rem;
+}
+
+/* ---------- About ---------- */
+
+.about-interests {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+}
+
+.about-interests li {
+  font-size: 0.95rem;
+  color: var(--secondary);
+  padding-left: 1em;
+  position: relative;
+}
+
+.about-interests li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: rgba(65, 45, 21, 0.6);
+}
+
+/* ---------- Resume ---------- */
+
+.resume-actions {
+  margin-bottom: 32px;
+}
+
+.resume-embed {
+  width: 100%;
+  height: 80vh;
+  border: 1px solid rgba(65, 45, 21, 0.25);
+  background-color: rgba(65, 45, 21, 0.04);
+}
+
+.resume-fallback {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  margin-top: 12px;
+}
+
+/* ---------- Blog ---------- */
+
+.blog-empty {
+  padding: 64px 0;
+  text-align: center;
+  color: var(--secondary);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  border-top: 1px solid rgba(65, 45, 21, 0.25);
+  border-bottom: 1px solid rgba(65, 45, 21, 0.25);
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  border-top: 1px solid rgba(65, 45, 21, 0.25);
+}
+
+.site-footer .container {
+  padding-top: 28px;
+  padding-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: var(--secondary);
+}
+
+.site-footer a {
+  color: var(--secondary);
+}

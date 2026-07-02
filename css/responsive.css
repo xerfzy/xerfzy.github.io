@@ -1,0 +1,90 @@
+/* =========================================================
+   responsive.css — breakpoints
+   Desktop-first content, adjusted down for smaller screens.
+   ========================================================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+  :root {
+    --gutter: 26px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  main {
+    padding-top: 56px;
+    padding-bottom: 72px;
+  }
+
+  .section {
+    margin-bottom: 56px;
+  }
+
+  .divider {
+    margin: 56px 0;
+  }
+}
+
+/* Phone */
+@media (max-width: 600px) {
+  :root {
+    --gutter: 20px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .site-header .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .site-nav {
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  main {
+    padding-top: 44px;
+    padding-bottom: 56px;
+  }
+
+  .section {
+    margin-bottom: 44px;
+  }
+
+  .divider {
+    margin: 44px 0;
+  }
+
+  .about-interests {
+    grid-template-columns: 1fr;
+  }
+
+  .link-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .resume-embed {
+    height: 60vh;
+  }
+
+  .site-footer .container {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Orion — Home</title>
+        <meta
+            name="description"
+            content="Personal site of a graphics engineer working on GPU programming, rendering, and physics simulation."
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/responsive.css" />
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="container">
+                <a href="index.html" class="site-title">Orion</a>
+                <nav>
+                    <ul class="site-nav">
+                        <li>
+                            <a href="index.html" aria-current="page">Home</a>
+                        </li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="resume.html">Resume</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+                <section class="section hero">
+                    <h1>Orion</h1>
+                    <p class="lede">
+                        I'm a engineer who enjoys working on gpu's and desinging
+                        new systems.
+                    </p>
+                    <p class="role-line">
+                        Graphics<span class="sep">·</span>GPU Programming<span
+                            class="sep"
+                            >·</span
+                        >System Design<span class="sep">·</span>Full Stack<span
+                            class="sep"
+                            >·</span
+                        >Physics simulations<span class="sep">·</span>Systems
+                        Programming
+                    </p>
+                </section>
+
+                <section class="section">
+                    <p class="eyebrow">Featured Work</p>
+                    <div class="project-grid" id="featured-projects"></div>
+                    <a class="view-all" href="projects.html"
+                        >View all projects →</a
+                    >
+                </section>
+
+                <hr class="divider" />
+
+                <section class="section">
+                    <p class="eyebrow">Elsewhere</p>
+                    <ul class="link-row">
+                        <li>
+                            <a
+                                href="https://github.com/Orion2726"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.linkedin.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >LinkedIn</a
+                            >
+                        </li>
+                        <li><a href="resume.html">Resume</a></li>
+                        <li><a href="mailto:hello@example.com">Email</a></li>
+                    </ul>
+                </section>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="container">
+                <span>&copy; <span id="year"></span> Orion</span>
+                <a
+                    href="https://github.com/Orion2726"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >github.com/Orion2726</a
+                >
+            </div>
+        </footer>
+
+        <script src="js/projects.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            document.getElementById("year").textContent =
+                new Date().getFullYear();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orion — About</title>
+  <meta name="description" content="A little about me — computer graphics, GPU computing, and life outside the terminal.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-title">Orion</a>
+      <nav>
+        <ul class="site-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+          <li><a href="resume.html">Resume</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section class="section">
+        <h1>About</h1>
+
+        <p>
+          I like understanding things at the level where the hardware and the math meet.
+          Most of my time goes into computer graphics and GPU computing — writing shaders,
+          building small renderers, and figuring out how to make parallel hardware do
+          exactly what I want it to.
+        </p>
+
+        <p>
+          I work mainly in C++, and I'm drawn to problems where correctness and performance
+          both matter: physics simulation, rendering pipelines, and the systems-level code
+          that holds them together.
+        </p>
+
+        <p>
+          Outside of that, I spend my time on calisthenics and bouldering, usually with a
+          coffee nearby and a cat somewhere in the room.
+        </p>
+      </section>
+
+      <hr class="divider">
+
+      <section class="section">
+        <p class="eyebrow">Interests</p>
+        <ul class="about-interests">
+          <li>Computer Graphics</li>
+          <li>GPU Computing</li>
+          <li>Physics Simulation</li>
+          <li>C++</li>
+          <li>Calisthenics</li>
+          <li>Bouldering</li>
+          <li>Cats</li>
+          <li>Coffee</li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>&copy; <span id="year"></span> Orion</span>
+      <a href="https://github.com/Orion2726" target="_blank" rel="noopener noreferrer">github.com/Orion2726</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
