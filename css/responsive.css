@@ -1,90 +1,200 @@
 /* =========================================================
-   responsive.css — breakpoints
-   Desktop-first content, adjusted down for smaller screens.
+   responsive.css
    ========================================================= */
 
-/* Tablet */
-@media (max-width: 900px) {
+
+/* =========================================================
+   Tablet
+   ========================================================= */
+
+@media (max-width: 800px) {
+
   :root {
-    --gutter: 26px;
+    --gutter: 24px;
   }
 
-  h1 {
-    font-size: 2.2rem;
-  }
 
   main {
-    padding-top: 56px;
-    padding-bottom: 72px;
+
+    padding-top: 75px;
+
+    padding-bottom: 90px;
   }
+
 
   .section {
-    margin-bottom: 56px;
+
+    margin-bottom: 90px;
   }
 
-  .divider {
-    margin: 56px 0;
+
+  .project-category {
+
+    margin-bottom: 100px;
   }
+
+
+  .focus-section {
+
+    grid-template-columns: 1fr;
+
+    gap: 30px;
+  }
+
+
+  .about-columns {
+
+    grid-template-columns: 1fr;
+
+    gap: 45px;
+  }
+
+
+  .about-interests {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
 }
 
-/* Phone */
+
+/* =========================================================
+   Phone
+   ========================================================= */
+
 @media (max-width: 600px) {
+
   :root {
-    --gutter: 20px;
+    --gutter: 18px;
   }
+
 
   body {
-    font-size: 16px;
+    font-size: 15px;
   }
 
-  h1 {
-    font-size: 1.8rem;
-  }
 
-  h2 {
-    font-size: 1.3rem;
-  }
+  .header-inner {
 
-  .site-header .container {
+    min-height: auto;
+
+    padding-top: 20px;
+
+    padding-bottom: 20px;
+
     flex-direction: column;
+
     align-items: flex-start;
-    gap: 14px;
-    padding-top: 22px;
-    padding-bottom: 22px;
+
+    gap: 18px;
   }
+
 
   .site-nav {
-    gap: 18px;
+
+    gap: 16px;
+
     flex-wrap: wrap;
   }
 
-  main {
-    padding-top: 44px;
-    padding-bottom: 56px;
+
+  .site-nav a {
+
+    font-size: 0.68rem;
   }
+
+
+  main {
+
+    padding-top: 55px;
+
+    padding-bottom: 70px;
+  }
+
 
   .section {
-    margin-bottom: 44px;
+
+    margin-bottom: 75px;
   }
 
-  .divider {
-    margin: 44px 0;
+
+  .hero {
+
+    padding-top: 15px;
+
+    padding-bottom: 50px;
   }
+
+
+  h1 {
+
+    font-size:
+      clamp(2.9rem, 16vw, 4.4rem);
+  }
+
+
+  .hero-copy {
+
+    font-size: 1rem;
+  }
+
+
+  .hero-links {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+
+  .category-heading {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 28px;
+  }
+
+
+  .project-card {
+
+    padding: 24px 0;
+  }
+
 
   .about-interests {
+
     grid-template-columns: 1fr;
   }
 
-  .link-row {
-    flex-direction: column;
-    gap: 12px;
+
+  .divider {
+
+    margin-bottom: 75px;
   }
+
 
   .resume-embed {
-    height: 60vh;
+
+    height: 65vh;
   }
 
-  .site-footer .container {
+
+  .footer-inner {
+
+    min-height: 110px;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
     flex-direction: column;
   }
+
 }

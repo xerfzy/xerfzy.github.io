@@ -1,67 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Orion — Resume</title>
-  <meta name="description" content="Resume — download or view inline.">
+
+  <meta
+    name="description"
+    content="Resume of Orion — graphics, GPU and game programming."
+  >
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+
 </head>
+
 <body>
 
-  <header class="site-header">
-    <div class="container">
-      <a href="index.html" class="site-title">Orion</a>
-      <nav>
-        <ul class="site-nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="resume.html" aria-current="page">Resume</a></li>
-          <li><a href="blog.html">Blog</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <main>
-    <div class="container">
+<header class="site-header">
 
-      <section class="section">
-        <h1>Resume</h1>
+  <div class="container header-inner">
 
-        <div class="resume-actions">
-          <a class="btn" href="assets/resume.pdf" download>Download PDF</a>
-        </div>
+    <a href="index.html" class="site-title">
+      Orion
+    </a>
 
-        <iframe
-          class="resume-embed"
-          src="assets/resume.pdf"
-          title="Resume PDF">
-        </iframe>
-        <p class="resume-fallback">
-          If the preview doesn't load, use the download button above to view the PDF directly.
-        </p>
-      </section>
+    <nav>
 
-    </div>
-  </main>
+      <ul class="site-nav">
 
-  <footer class="site-footer">
-    <div class="container">
-      <span>&copy; <span id="year"></span> Orion</span>
-      <a href="https://github.com/Orion2726" target="_blank" rel="noopener noreferrer">github.com/Orion2726</a>
-    </div>
-  </footer>
+        <li><a href="index.html">Home</a></li>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+        <li><a href="projects.html">Projects</a></li>
+
+        <li><a href="about.html">About</a></li>
+
+        <li>
+          <a href="resume.html" aria-current="page">
+            Resume
+          </a>
+        </li>
+
+        <li><a href="blog.html">Blog</a></li>
+
+      </ul>
+
+    </nav>
+
+  </div>
+
+</header>
+
+
+<main>
+
+  <div class="container">
+
+    <section class="page-intro section">
+
+      <p class="eyebrow">
+        Curriculum vitae
+      </p>
+
+      <h1>Resume</h1>
+
+      <div class="resume-actions">
+
+        <a
+          class="btn btn-primary"
+          href="assets/resume.pdf"
+          download
+        >
+          Download PDF
+        </a>
+
+      </div>
+
+      <iframe
+        class="resume-embed"
+        src="assets/resume.pdf"
+        title="Orion resume"
+      ></iframe>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-inner">
+
+    <span>
+      &copy; <span id="year"></span> Orion
+    </span>
+
+    <a
+      href="https://github.com/Orion2726"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      github.com/Orion2726
+    </a>
+
+  </div>
+
+</footer>
+
+
+<script src="js/background.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+</script>
+
 </body>
 </html>

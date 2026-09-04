@@ -1,87 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Orion — About</title>
-  <meta name="description" content="A little about me — computer graphics, GPU computing, and life outside the terminal.">
+
+  <meta
+    name="description"
+    content="About Orion — computer graphics, GPU programming and game development."
+  >
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
+
 </head>
+
 <body>
 
-  <header class="site-header">
-    <div class="container">
-      <a href="index.html" class="site-title">Orion</a>
-      <nav>
-        <ul class="site-nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="about.html" aria-current="page">About</a></li>
-          <li><a href="resume.html">Resume</a></li>
-          <li><a href="blog.html">Blog</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <main>
-    <div class="container">
+<header class="site-header">
 
-      <section class="section">
-        <h1>About</h1>
+  <div class="container header-inner">
 
-        <p>
-          I like understanding things at the level where the hardware and the math meet.
-          Most of my time goes into computer graphics and GPU computing — writing shaders,
-          building small renderers, and figuring out how to make parallel hardware do
-          exactly what I want it to.
+    <a href="index.html" class="site-title">
+      Orion
+    </a>
+
+    <nav>
+      <ul class="site-nav">
+
+        <li><a href="index.html">Home</a></li>
+
+        <li><a href="projects.html">Projects</a></li>
+
+        <li>
+          <a href="about.html" aria-current="page">
+            About
+          </a>
+        </li>
+
+        <li><a href="resume.html">Resume</a></li>
+
+        <li><a href="blog.html">Blog</a></li>
+
+      </ul>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<main>
+
+  <div class="container">
+
+    <section class="section about-intro">
+
+      <p class="eyebrow">About</p>
+
+
+
+      <p>
+        I'm a computer science student interested in the space between
+        software, mathematics and hardware.
+      </p>
+
+      <p>
+        Most of my work so far has been around C++, computer graphics,
+        GPU programming and games. I enjoy implementing things myself,
+        understanding how they work and then pushing them further.
+      </p>
+
+    </section>
+
+
+    <hr class="divider">
+
+
+    <section class="section about-columns">
+
+      <div class="reveal">
+
+        <p class="eyebrow">
+          Graphics & compute
         </p>
 
         <p>
-          I work mainly in C++, and I'm drawn to problems where correctness and performance
-          both matter: physics simulation, rendering pipelines, and the systems-level code
-          that holds them together.
+          Rendering, shaders, GPU compute, Vulkan and OpenGL.
+          I'm particularly interested in algorithms that can be
+          expressed efficiently on parallel hardware.
+        </p>
+
+      </div>
+
+
+      <div class="reveal">
+
+        <p class="eyebrow">
+          Games
         </p>
 
         <p>
-          Outside of that, I spend my time on calisthenics and bouldering, usually with a
-          coffee nearby and a cat somewhere in the room.
+          Unity, Unreal and C#. I enjoy gameplay systems, movement,
+          physics, rendering and the technical side of making games.
         </p>
-      </section>
 
-      <hr class="divider">
+      </div>
 
-      <section class="section">
-        <p class="eyebrow">Interests</p>
-        <ul class="about-interests">
-          <li>Computer Graphics</li>
-          <li>GPU Computing</li>
-          <li>Physics Simulation</li>
-          <li>C++</li>
-          <li>Calisthenics</li>
-          <li>Bouldering</li>
-          <li>Coffee</li>
-        </ul>
-      </section>
+    </section>
 
-    </div>
-  </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <span>&copy; <span id="year"></span> Orion</span>
-      <a href="https://github.com/Orion2726" target="_blank" rel="noopener noreferrer">github.com/Orion2726</a>
-    </div>
-  </footer>
+    <section class="section">
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+      <p class="eyebrow">
+        Interests
+      </p>
+
+      <ul class="about-interests">
+
+        <li class="reveal">C++</li>
+        <li class="reveal">Computer Graphics</li>
+        <li class="reveal">GPU Computing</li>
+        <li class="reveal">Vulkan</li>
+        <li class="reveal">Shaders</li>
+        <li class="reveal">Game Programming</li>
+        <li class="reveal">Physics</li>
+        <li class="reveal">Mathematics</li>
+
+      </ul>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-inner">
+
+    <span>
+      &copy; <span id="year"></span> Orion
+    </span>
+
+    <a
+      href="https://github.com/Orion2726"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      github.com/Orion2726
+    </a>
+
+  </div>
+
+</footer>
+
+
+<script src="js/background.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+</script>
+
 </body>
 </html>

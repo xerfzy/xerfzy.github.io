@@ -1,128 +1,191 @@
-/* =========================================================
-   projects.js
-   Single source of truth for project data.
-   ========================================================= */
+/*
+  projects.js
+  Project data for the portfolio.
+*/
 
 const PROJECTS = [
+
+  /* =========================================================
+     RENDERING & GPU COMPUTE
+     ========================================================= */
+
   {
-    title: "ChaCha20 Image Encryption on the GPU",
+    title: "ChaCha20 Image Encryption",
+    category: "rendering",
     description:
-      "GPU-accelerated image encryption using the ChaCha20 stream cipher, implemented as an OpenGL compute shader that encrypts image data directly on the GPU.",
-    tech: ["C++", "OpenGL", "GLSL", "Cryptography"],
-    repo: "https://github.com/Orion2726/chacha2020ImageEncryption_using_compute_shader",
-    image: "",
-    featured: true,
+      "ChaCha20 image encryption implemented as an OpenGL compute shader, processing image data directly on the GPU.",
+    tech: ["C++", "OpenGL", "GLSL", "GPU Compute"],
+    repo:
+      "https://github.com/Orion2726/chacha2020ImageEncryption_using_compute_shader",
+    featured: true
   },
+
   {
-    title: "Ray Marcher — Fragment Shader",
+    title: "Ray Marcher",
+    category: "rendering",
     description:
-      "A real-time ray marching renderer written in GLSL fragment shaders. Scenes are defined as signed distance fields and rendered entirely on the GPU, pixel by pixel.",
+      "Real-time signed-distance-field ray marching implemented in GLSL and executed entirely on the GPU.",
     tech: ["C++", "OpenGL", "GLSL"],
-    repo: "https://github.com/Orion2726/Ray_marcher_using_fragment_shader_in_opengl",
-    image: "",
-    featured: true,
-  },
-  {
-    title: "UAV Dashboard - Patent published",
-    description:
-      "A simulated centralized dashboard for visualizing UAV telemetry data and monitoring multiple drone units through a web interface",
-    tech: ["Full-Stack", "WebDev", "UAV"],
-    repo: "https://github.com/Orion2726/CENTRAL-UAV-DASHBOARD-vc",
-    image: "",
-    featured: true,
-  },
-  {
-    title: "Ray Marcher — Compute Shader",
-    description:
-      "A compute-shader take on ray marching. Distance-field evaluation is moved off the fragment pipeline and into parallel GPU compute, dispatched directly to an output image.",
-    tech: ["C++", "OpenGL", "GLSL Compute Shaders"],
-    repo: "https://github.com/Orion2726/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-",
-    image: "",
-    featured: false,
+    repo:
+      "https://github.com/Orion2726/Ray_marcher_using_fragment_shader_in_opengl",
+    featured: true
   },
 
   {
     title: "Ray Tracer",
+    category: "rendering",
     description:
-      "A from-scratch CPU ray tracer built to work through the fundamentals of light transport, reflection, refraction, and shading models.",
-    tech: ["C++"],
-    repo: "https://github.com/Orion2726/Ray_tracer-learning-project-",
-    image: "",
-    featured: true,
+      "From-scratch CPU ray tracer exploring rays, intersections, reflection, refraction and shading.",
+    tech: ["C++", "Ray Tracing"],
+    repo:
+      "https://github.com/Orion2726/Ray_tracer-learning-project-",
+    featured: true
   },
+
+  {
+    title: "Ray Marcher — Compute Shader",
+    category: "rendering",
+    description:
+      "Ray marching moved from the fragment pipeline into a dedicated GPU compute pass.",
+    tech: ["C++", "OpenGL", "GLSL Compute"],
+    repo:
+      "https://github.com/Orion2726/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-",
+    featured: false
+  },
+
   {
     title: "OpenGL Experiments",
+    category: "rendering",
     description:
-      "A running collection of OpenGL experiments and rendering techniques, written while learning the graphics pipeline from the ground up.",
+      "A collection of small rendering experiments built while learning the graphics pipeline.",
     tech: ["C++", "OpenGL"],
-    repo: "https://github.com/Orion2726/questionable-opengl-code",
-    image: "",
-    featured: false,
+    repo:
+      "https://github.com/Orion2726/questionable-opengl-code",
+    featured: false
   },
+
+
+  /* =========================================================
+     GAMES
+     ========================================================= */
+
   {
-    title: "ESP32 Visual SLAM",
+    title: "Doofus Diary",
+    category: "games",
     description:
-      "A visual SLAM pipeline that streams a live camera feed from an ESP32 into ORB-SLAM for real-time localization and mapping.",
-    tech: ["Python", "C", "ESP32", "ORB-SLAM"],
-    repo: "https://github.com/Orion2726/ESP32-PYTHON-ORB-SLAM-VC",
-    image: "",
-    featured: false,
+      "A Unity 3D platform-survival game built around modular movement, dynamic platforms, progression and physics-based camera movement.",
+    tech: ["Unity", "C#", "Game Systems", "Physics"],
+    repo:
+      "https://github.com/Orion2726/HW_2026_Test",
+    featured: true
   },
+
+  {
+    title: "Slot Machine",
+    category: "games",
+    description:
+      "Unity slot machine with weighted RNG, modular reel systems and a custom URP post-process shader.",
+    tech: ["Unity", "C#", "URP", "HLSL"],
+    repo:
+      "https://github.com/Orion2726/Slot_Machine",
+    featured: true
+  },
+
+  {
+    title: "FPS Controller & Rendering Sandbox",
+    category: "games",
+    description:
+      "Physics-based first-person movement with acceleration, friction, air control, coyote time, jump buffering and momentum-based traversal.",
+    tech: ["Unity", "C#", "Physics", "Shaders"],
+    repo:
+      "https://youtu.be/c5Gg8ksg7hw?si=0hDUA-PtDtQsHDjy",
+    featured: true
+  },
+
+
+  /* =========================================================
+     AI FOR GAMES
+     ========================================================= */
+
   {
     title: "Space Shooter — Deep Q-Learning",
+    category: "ai-games",
     description:
-      "A classic arcade-style space shooter paired with an agent trained via Deep Q-Learning to play the game autonomously.",
-    tech: ["Python", "Reinforcement Learning"],
-    repo: "https://github.com/Orion2726/Space_shooter_using_DQN_vc",
-    image: "",
-    featured: false,
+      "A space shooter paired with a Deep Q-Learning agent trained to play the game autonomously.",
+    tech: ["Python", "Reinforcement Learning", "Game AI"],
+    repo:
+      "https://github.com/Orion2726/Space_shooter_using_DQN_vc",
+    featured: false
   },
+
+
+  /* =========================================================
+     OTHER
+     ========================================================= */
+
   {
-    title: "DSA_H",
+    title: "Central UAV Dashboard",
+    category: "other",
     description:
-      "A single-header C library implementing common data structures and algorithms from first principles, with no external dependencies.",
-    tech: ["C"],
-    repo: "https://github.com/Orion2726/DSA_H",
-    image: "",
-    featured: false,
-  },
-];
-
-/**
- * Build the DOM markup for a single project card.
- * @param {Object} project
- * @returns {HTMLElement}
- */
-function createProjectCard(project) {
-  const card = document.createElement("article");
-  card.className = "project-card";
-
-  let imageHtml = "";
-  if (project.image) {
-    imageHtml = `<img src="${project.image}" alt="${project.title} screenshot" loading="lazy">`;
+      "A centralized interface for monitoring simulated UAV telemetry and multiple drone units.",
+    tech: ["TypeScript", "Web", "UAV"],
+    repo:
+      "https://github.com/Orion2726/CENTRAL-UAV-DASHBOARD-vc",
+    featured: false
   }
 
+];
+
+
+function createProjectCard(project) {
+
+  const card = document.createElement("article");
+
+  card.className = "project-card reveal";
+
   card.innerHTML = `
-    ${imageHtml}
-    <h3>${project.title}</h3>
-    <p class="project-desc">${project.description}</p>
-    <p class="project-tech">${project.tech.join(" · ")}</p>
-    <a class="btn" href="${project.repo}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+    <div class="project-card-content">
+
+      <h3>${project.title}</h3>
+
+      <p class="project-desc">
+        ${project.description}
+      </p>
+
+      <p class="project-tech">
+        ${project.tech.join(" · ")}
+      </p>
+
+      <a
+        class="project-link"
+        href="${project.repo}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View project
+      </a>
+
+    </div>
   `;
 
   return card;
 }
 
-/**
- * Render a list of projects into a container element by id.
- * @param {string} containerId
- * @param {Object[]} projects
- */
+
 function renderProjects(containerId, projects) {
-  const container = document.getElementById(containerId);
+
+  const container =
+    document.getElementById(containerId);
+
   if (!container) return;
 
-  projects.forEach((project) => {
-    container.appendChild(createProjectCard(project));
+  container.innerHTML = "";
+
+  projects.forEach(project => {
+
+    container.appendChild(
+      createProjectCard(project)
+    );
+
   });
 }
