@@ -1,59 +1,59 @@
-# xerf — A Guide to My Work
+# xerf
 
 KISP — Keep It Secure, Performant.
 
-A static portfolio laid out as a plain web directory: categories, counts and short descriptions. The pages are pre-rendered HTML with one small stylesheet. Only the Experiments page loads a script (a filter under 1 KB gzipped), and the site works without it. There are no frameworks, web fonts, trackers or third-party requests.
+A static portfolio laid out as a plain web directory. It is plain HTML, one stylesheet and one small script: no build step, no frameworks, no web fonts, no trackers. Every page is a normal `.html` file that you edit directly.
 
-## Layout
+## Where things are
 
 ```
-index.html, 404.html, robots.txt, sitemap.xml   generated
-projects/ experiments/ research/ writing/
-about/ whats-new/ resumes/index.html            generated pages (do not edit by hand)
+index.html                      homepage (directory + counts + recently updated)
+about/index.html                About
+whats-new/index.html            What's New
+projects/index.html             all projects
+projects/<category>/index.html  one page per category (systems, graphics, mobile, games, ai, robotics, web)
+projects/<slug>/index.html      project detail pages
+experiments/index.html          Experiments and Archive (with the filter)
+research/index.html             Research and Publications
+writing/index.html              Writing
+writing/<slug>/index.html       articles
+resumes/index.html              Resumes page; the PDFs are in resumes/pdf/
+404.html                        not-found page (links are root-absolute: /about/ etc.)
+sitemap.xml, robots.txt         edit by hand when you add or remove a page
 
-content/
-  projects.json            the project registry: categories, tiers, records
-  projects/<slug>.html     body of a project detail page (only when "detail": true)
-  writing.json             article list and external writing
-  writing/<slug>.html      article bodies
-  updates.json             What's New entries (newest first)
-  research.json            publication records
-  resumes.json             resume list for the Resumes page
-  pages/about.html         About page body
-site.config.json           identity, contact, education, base URL
-
-assets/css/site.css        the only stylesheet
-assets/js/filter.js        Experiments filter (progressive enhancement)
-assets/images/             project images (WebP)
-assets/documents/          patent publication PDF
+assets/css/site.css             the only stylesheet (colours are at the top, in :root)
+assets/js/filter.js             Experiments filter; the page works without it
+assets/images/                  project images (WebP)
+assets/documents/               patent publication PDF
 assets/favicon.svg
 
-resumes/sources/*.typ      resume sources (Typst)
-resumes/pdf/*.pdf          generated resumes
-
-scripts/build.mjs                 site build (Node, no dependencies)
-scripts/check.mjs                 static checks
-scripts/check-external-links.mjs  external link check
-scripts/build-resumes.sh          resume build + scripts/check-resumes.py
-tests/site.spec.mjs               Playwright browser tests
-
-docs/PROJECT_AUDIT.md         evidence for every project claim
-docs/CONTENT_DECISIONS.md     categorisation, naming, scope decisions
-docs/RESUME_KEYWORD_MATRIX.md job-posting keywords vs. evidence
-docs/PERFORMANCE_REPORT.md    measured results and environment
-docs/screenshots/             responsive screenshots from the test run
+resumes/sources/*.typ           resume sources (Typst)
+scripts/check.mjs               static checks
+scripts/check-external-links.mjs
+scripts/build-resumes.sh        builds and checks the five resume PDFs
+tests/site.spec.mjs             Playwright browser tests
+docs/                           project audit, decisions, keyword matrix, performance report
 ```
 
-## Build and preview
+Every page repeats the same header (title, tagline, nav) and footer. If you change one of those, change it on every page, for example with a search-and-replace across `*.html`. Links are relative: a page one folder deep links home with `../`, two folders deep with `../../`.
+
+## Preview
 
 ```sh
-node scripts/build.mjs                 # regenerate all pages (Node 18+)
 python3 -m http.server 8000            # then open http://127.0.0.1:8000/
 ```
 
-Use a local server rather than opening files directly. Links point at directories (`projects/`), and over `file://` the browser shows a directory listing instead of `index.html`.
+Use a local server rather than opening files directly. Links point at folders (`projects/`), and over `file://` the browser shows a folder listing instead of `index.html`.
 
-The build reads only `content/` and `site.config.json`, and is deterministic: the same content always produces the same bytes. Counts, "Last updated" (the newest date in `updates.json` or the registry), ordering, related links and the sitemap are all derived at build time.
+## Adding things
+
+- **A project.** Add an `<li id="slug">` entry to its category page (`projects/<category>/index.html`) and to `projects/index.html`. Raise that category's `(n)` on the homepage by one. If it is an experiment, coursework or archive entry, also add it to `experiments/index.html` and raise the Experiments and Archive count.
+- **A detail page.** Copy an existing `projects/<slug>/index.html` to a new folder, change the text, link to it, and add its URL to `sitemap.xml`. Images go in `assets/images/` as WebP, with `width`, `height`, `alt` and `loading="lazy"`.
+- **An article.** Copy an existing `writing/<slug>/index.html`, link it from `writing/index.html`, and add it to `sitemap.xml`.
+- **An update.** Add a dated `<li>` at the top of `whats-new/index.html`, and to "Recently updated" on the homepage if it should show there.
+- **A resume.** See `resumes/README.md`.
+
+`node scripts/check.mjs` catches the usual slips: a homepage count that doesn't match its page, a page missing from the sitemap, a broken link or anchor, invalid HTML.
 
 ## Checks
 
@@ -61,8 +61,7 @@ The build reads only `content/` and `site.config.json`, and is deterministic: th
 npm install                            # dev tools only: Playwright, axe-core, html-validate
 npx playwright install chromium        # once
 
-node scripts/build.mjs
-node scripts/check.mjs                 # reproducible build, HTML validity, links, counts, privacy grep
+node scripts/check.mjs                 # HTML validity, links, counts, sitemap, privacy grep
 npx playwright test                    # overflow 320-1920 px, axe, keyboard, filter, PDFs, screenshots
 node scripts/check-external-links.mjs  # every external URL in the pages and resume PDFs
 bash scripts/build-resumes.sh          # rebuild and text-check the five resume PDFs
@@ -70,52 +69,21 @@ bash scripts/build-resumes.sh          # rebuild and text-check the five resume 
 
 `scripts/check.mjs` also reads an optional, git-ignored `.private-patterns` file (`label<TAB>regex` per line) for identifiers that must never be published but should not be written into a public script either.
 
-Lighthouse, as used for the report:
+Lighthouse:
 
 ```sh
 CHROME_PATH=$(ls ~/.cache/ms-playwright/chromium-*/chrome-linux64/chrome | head -1) \
   npx lighthouse@12.8.2 http://127.0.0.1:8000/ --preset=desktop --view
 ```
 
-## Adding content
-
-**A project.** Add one record to `content/projects.json`:
-
-```jsonc
-{
-  "slug": "my-tool",                     // lowercase-hyphenated; becomes projects/my-tool/
-  "title": "my-tool",
-  "category": "systems",                 // systems | graphics | mobile | games | ai | robotics | web
-  "tier": "project",                     // featured | research | project | coursework | experiment | archive
-  "summary": "One factual sentence.",
-  "tags": ["C++17", "Linux"],
-  "repo": "https://github.com/xerfzy/my-tool",
-  "demo": "...", "video": "...", "download": "...",   // optional
-  "period": "Nov 2026", "year": 2026, "updated": "2026-11-20",
-  "status": "Working",
-  "detail": false,                        // true requires content/projects/my-tool.html
-  "related": ["censface-cpp"]             // optional
-}
-```
-
-Then run the build. The project appears in its category, the counts update, and if its tier is experiment, coursework or archive it also appears in Experiments and Archive. For a detail page, set `"detail": true` and write `content/projects/<slug>.html`. Use `<h2>` sections; `{{root}}` expands to the relative path to the site root. Put images in `assets/images/` as WebP, with `width`, `height`, `alt` and `loading="lazy"`.
-
-**An experiment.** It is the same as a project, with tier `experiment` (or `coursework` / `archive`).
-
-**An article.** Add an entry to `content/writing.json`, with `basis` stating whether it comes from source, docs or measured results. Write the body in `content/writing/<slug>.html`.
-
-**An update.** Add a dated line at the top of `content/updates.json`. Entries with a `project` field feed "Recently updated" on the homepage.
-
-**A resume.** See `resumes/README.md`.
-
 ## Deploying to GitHub Pages
 
-The generated site is committed at the repository root, so Pages needs no build step. `.nojekyll` is included.
+The site is the repository root, so Pages needs no build step. `.nojekyll` is included.
 
-1. Run the build and all checks. Commit.
-2. To serve at `https://xerfzy.github.io/` (the `baseUrl` in `site.config.json`), rename this repository to `xerfzy.github.io` and enable Pages from the `main` branch root.
-3. To serve elsewhere, change `baseUrl`, rebuild, and commit. Relative links work at any path. Only canonical URLs, the sitemap and the 404 page depend on `baseUrl`.
+1. Run the checks. Commit.
+2. To serve at `https://xerfzy.github.io/`, rename this repository to `xerfzy.github.io` and enable Pages from the `main` branch root.
+3. To serve elsewhere, replace `https://xerfzy.github.io/` in the canonical/`og:url` tags, `sitemap.xml` and `robots.txt`, and the root-absolute links in `404.html`. Relative links work at any path.
 
-Files outside the generated pages are also published, because Pages serves the whole branch: `content/`, `docs/`, `resumes/sources/` and `scripts/`. They contain nothing private (`scripts/check.mjs` verifies this). Locally, `Text File.txt` and `.private-patterns` are git-ignored.
+Pages serves the whole branch, so `docs/`, `resumes/sources/` and `scripts/` are public too. They contain nothing private (`scripts/check.mjs` verifies this). Locally, `Text File.txt` and `.private-patterns` are git-ignored.
 
 GitHub Pages cannot set HTTP headers. The CSP is therefore a `<meta>` tag, and `frame-ancestors` and HSTS are not available.

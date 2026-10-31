@@ -62,14 +62,14 @@ Screenshots of 8 page types at 360 px and 1366 px are in `docs/screenshots/`. Th
 
 ## Static checks (`node scripts/check.mjs`)
 
-- Rebuilding into a temporary directory reproduces every generated file byte for byte.
+- `sitemap.xml` lists every page except 404, and nothing else.
 - html-validate (recommended rules) passes on all 29 pages.
 - `node --check` passes on all JavaScript.
 - 476 internal links and asset references resolve, including `#anchor` targets.
 - There are no duplicate IDs, no `style=""` attributes, no inline scripts, no event-handler attributes and no `href="#"`.
 - Every `<img>` has `alt`, `width` and `height`.
-- Each category count on the homepage and on its category page equals the registry count.
-- The resume PDFs and the patent PDF exist.
+- Every `(n)` count on the homepage equals the number of entries on the page it links to.
+- The patent PDF exists, and all five resume PDFs exist and are linked from the Resumes page.
 - No local paths, private keys, keystores, registration numbers or other private identifiers appear anywhere in the published tree. Private patterns are read from the git-ignored `.private-patterns` file.
 
 ## External links (`node scripts/check-external-links.mjs`)

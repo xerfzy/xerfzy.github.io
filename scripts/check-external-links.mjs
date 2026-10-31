@@ -11,7 +11,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SKIP = new Set(['.git', 'node_modules', 'content', 'docs', 'scripts', 'tests', 'test-results']);
+const SKIP = new Set(['.git', 'node_modules', 'docs', 'scripts', 'tests', 'test-results']);
 const walk = (d, out = []) => {
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     if (SKIP.has(e.name)) continue;
@@ -55,7 +55,7 @@ async function probe(url) {
 }
 
 // The site's own canonical/og URLs only resolve once the site is deployed there.
-const { baseUrl } = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8'));
+const baseUrl = fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8').match(/Sitemap: (\S+)sitemap\.xml/)[1];
 const ownPages = new Set(walk(ROOT).filter((f) => f.endsWith('.html'))
   .map((f) => baseUrl + path.relative(ROOT, f).replace(/index\.html$/, '')));
 const own = [...urls.keys()].filter((u) => ownPages.has(u));

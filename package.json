@@ -4,7 +4,6 @@
   "description": "Static portfolio site. The site itself has no runtime dependencies; these packages are for checks only.",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
     "check:links": "node scripts/check-external-links.mjs",
     "test": "playwright test",

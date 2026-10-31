@@ -8,7 +8,7 @@ Claim markers used below:
 - **[R]** reported in the repository README or docs, not reproduced here
 - **[U]** unverified, or contradicted by the source
 
-The registry that drives the site is `content/projects.json`. This file records the evidence behind it.
+This file records the evidence behind the project descriptions on the site.
 
 Authorship: commits under earlier handles of the same owner are counted as this author's own work. Other contributors are referred to as teammates.
 

@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-// Static checks for the built site. Run after `node scripts/build.mjs`.
+// Static checks for the site's HTML files.
 //   node scripts/check.mjs
 // Exits non-zero if anything fails. Needs `npm install` for html-validate.
 
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -26,20 +25,19 @@ function walk(dir, out = []) {
 }
 
 const files = walk(ROOT);
-const htmlFiles = files.filter((f) => f.endsWith('.html') && !rel(f).startsWith('content/'));
-const reg = JSON.parse(read(path.join(ROOT, 'content/projects.json')));
+const htmlFiles = files.filter((f) => f.endsWith('.html'));
+const count = (file, re) => (read(path.join(ROOT, file)).match(re) || []).length;
 
-// 1. Deterministic build: rebuilding into a temp dir must reproduce the committed output.
+// 1. sitemap.xml lists every page (except 404) and nothing that doesn't exist.
 {
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'site-build-'));
-  execFileSync(process.execPath, [path.join(ROOT, 'scripts/build.mjs'), '--out', tmp], { stdio: 'pipe' });
-  for (const f of walk(tmp)) {
-    const r = path.relative(tmp, f);
-    const mine = path.join(ROOT, r);
-    if (!fs.existsSync(mine)) fail('build', `${r} is generated but missing from the repo (run the build)`);
-    else if (!fs.readFileSync(mine).equals(fs.readFileSync(f))) fail('build', `${r} is out of date (run the build)`);
+  const base = (read(path.join(ROOT, 'robots.txt')).match(/Sitemap: (\S+)sitemap\.xml/) || [])[1];
+  if (!base) fail('sitemap', 'robots.txt has no Sitemap line');
+  else {
+    const listed = new Set([...read(path.join(ROOT, 'sitemap.xml')).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]));
+    const pages = new Set(htmlFiles.map(rel).filter((r) => r !== '404.html').map((r) => base + r.replace(/index\.html$/, '')));
+    for (const u of pages) if (!listed.has(u)) fail('sitemap', `${u} is missing from sitemap.xml`);
+    for (const u of listed) if (!pages.has(u)) fail('sitemap', `sitemap.xml lists ${u}, but there is no such page`);
   }
-  fs.rmSync(tmp, { recursive: true, force: true });
 }
 
 // 2. HTML validation.
@@ -93,27 +91,29 @@ for (const f of htmlFiles) {
   }
 }
 
-// 5. Directory counts on the homepage match the registry.
+// 5. Each "(n)" on the homepage matches the number of entries on the page it links to.
 {
   const home = read(path.join(ROOT, 'index.html'));
-  for (const c of reg.categories) {
-    const want = reg.projects.filter((p) => p.category === c.key).length;
-    const m = home.match(new RegExp(`projects/${c.key}/">[^<]+</a> <span class="n">\\((\\d+)\\)`));
-    if (!m) fail('counts', `homepage has no count for ${c.key}`);
-    else if (Number(m[1]) !== want) fail('counts', `${c.key}: homepage says ${m[1]}, registry has ${want}`);
-    const page = path.join(ROOT, 'projects', c.key, 'index.html');
-    const listed = (read(page).match(/<li id="/g) || []).length;
-    if (listed !== want) fail('counts', `projects/${c.key}/ lists ${listed}, registry has ${want}`);
+  const counted = [...home.matchAll(/<a href="\.\/([^"]+)">([^<]+)<\/a> <span class="n">\((\d+)\)/g)];
+  if (counted.length !== 9) fail('counts', `homepage has ${counted.length} counted directories, expected 9`);
+  for (const [, dir, name, n] of counted) {
+    const file = path.join(dir, 'index.html');
+    if (!fs.existsSync(path.join(ROOT, file))) { fail('counts', `${name}: ${file} does not exist`); continue; }
+    const listed = dir === 'experiments/' ? count(file, /<li data-cat="/g)
+      : dir === 'research/' ? count(file, /class="record"/g) + count(file, /<li id="/g)
+      : count(file, /<li id="/g);
+    if (listed !== Number(n)) fail('counts', `${name}: homepage says (${n}) but ${file} lists ${listed}`);
   }
-  const slugs = reg.projects.map((p) => p.slug);
-  if (new Set(slugs).size !== slugs.length) fail('registry', 'duplicate slugs');
 }
 
-// 6. Required documents.
-for (const d of [
-  'assets/documents/IN202641060337A1.pdf',
-  ...JSON.parse(read(path.join(ROOT, 'content/resumes.json'))).map((r) => `resumes/pdf/${r.file}`),
-]) if (!fs.existsSync(path.join(ROOT, d))) fail('docs', `missing ${d}`);
+// 6. Required documents: the patent PDF, and every resume PDF is linked from the resumes page.
+{
+  if (!fs.existsSync(path.join(ROOT, 'assets/documents/IN202641060337A1.pdf'))) fail('docs', 'missing patent PDF');
+  const linked = new Set([...read(path.join(ROOT, 'resumes/index.html')).matchAll(/href="pdf\/([^"]+\.pdf)"/g)].map((m) => m[1]));
+  const onDisk = fs.readdirSync(path.join(ROOT, 'resumes/pdf')).filter((f) => f.endsWith('.pdf'));
+  if (onDisk.length !== 5) fail('docs', `resumes/pdf has ${onDisk.length} PDFs, expected 5`);
+  for (const f of onDisk) if (!linked.has(f)) fail('docs', `resumes/pdf/${f} is not linked from resumes/index.html`);
+}
 
 // 7. Nothing private in the published tree. Everything outside .git/node_modules is
 //    published by GitHub Pages, so scan all text files (and PDF metadata) for local
@@ -152,7 +152,7 @@ for (const d of [
     else if (f.endsWith('.pdf')) body = execFileSync('pdfinfo', [f], { encoding: 'utf8' });
     else continue;
     for (const [re, what] of everywhere) if (re.test(body)) fail('privacy', `${r}: ${what} (${body.match(re)[0]})`);
-    const isSite = /\.(html|css|js)$/.test(f) && !r.startsWith('content/') && !r.startsWith('scripts/') && !r.startsWith('tests/');
+    const isSite = /\.(html|css|js)$/.test(f) && !r.startsWith('scripts/') && !r.startsWith('tests/');
     if (isSite) for (const [re, what] of siteOnly) if (re.test(body)) fail('privacy', `${r}: ${what}`);
   }
 }
@@ -163,4 +163,4 @@ if (problems.length) {
   console.error(`${problems.length} problem(s):\n` + problems.map((p) => '  ' + p).join('\n'));
   process.exit(1);
 }
-console.log(`OK: ${pages} pages, ${internalLinks} internal links/assets, build reproducible, HTML valid, no private strings.`);
+console.log(`OK: ${pages} pages, ${internalLinks} internal links/assets, sitemap and counts match, HTML valid, no private strings.`);

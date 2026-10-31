@@ -112,7 +112,7 @@ test('resume and patent PDFs download as PDFs', async ({ page, request }) => {
 
 test('homepage has the required wording and no introduction paragraph', async ({ page }) => {
   await page.goto('');
-  await expect(page.locator('h1')).toHaveText('xerf — A Guide to My Work');
+  await expect(page.locator('h1')).toHaveText('xerf');
   await expect(page.locator('.tagline')).toHaveText('KISP — Keep It Secure, Performant.');
   await expect(page.locator('nav.main')).toHaveText("[ What's New? | Projects | Experiments | Writing | About | Resumes ]");
   expect(await page.locator('main p').count()).toBe(0);

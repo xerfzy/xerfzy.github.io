@@ -40,8 +40,8 @@ pdftoppm -r 100 -png resumes/pdf/Sre_Cibi_Varsshan_Software_Engineer.pdf /tmp/re
 
 ## Editing
 
-- **Contact details.** Edit `person` in `sources/common.typ`. `phone`, `location`, `linkedin` and `website` are `none` placeholders and are printed only when filled in. Add `website: "xerfzy.github.io"` once the site is deployed there.
+- **Contact details.** Edit `person` in `sources/common.typ`. `phone` and `location` are `none` placeholders and are printed only when filled in.
 - **A bullet.** Use the form "action + technical implementation + purpose or measured result". Use only facts that are in the project source or recorded results; `docs/PROJECT_AUDIT.md` lists what is verified.
 - **Characters.** Write ASCII: `-` not dashes, `x` not `×`, and no `~` (a non-breaking space in Typst). In Typst markup, escape `#` as `\#` (as in `C\#`) and avoid `@`, `_` and `<` outside strings. Repository paths go through `repo("user/name")`, which handles underscores.
 - **Keywords.** `docs/RESUME_KEYWORD_MATRIX.md` records which keywords each resume deliberately includes and excludes, and why.
-- **A new variant.** Copy one source file, add it to the `OUT` table in `scripts/build-resumes.sh` and to `EXPECTED` in `scripts/check-resumes.py`, and list it in `content/resumes.json` so the website links it.
+- **A new variant.** Copy one source file, add it to the `OUT` table in `scripts/build-resumes.sh` and to `EXPECTED` in `scripts/check-resumes.py`, and add a link to it in `resumes/index.html`.

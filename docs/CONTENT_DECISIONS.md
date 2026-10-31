@@ -3,16 +3,16 @@
 This records choices made while rebuilding the site and resumes, so that they can be revisited deliberately rather than by accident. The evidence for each project is in `PROJECT_AUDIT.md`.
 
 ## Identity and contact
-- The site identity is **xerf**. The title is "xerf — A Guide to My Work" and the tagline is "KISP — Keep It Secure, Performant.", both verbatim. The full name appears on the About page, the research record and the resumes.
+- The site identity is **xerf**. The title is "xerf"; the brief's "A Guide to My Work" subtitle was dropped at the owner's request. The tagline is "KISP — Keep It Secure, Performant." (verbatim). The full name appears on the About page, the research record and the resumes.
 - **Email conflict.** The September 2026 resume PDF used `srecibi@gmail.com`; the previous site (commit b376a4a) and the account use `srecibi9@gmail.com`. The owner confirmed **srecibi9@gmail.com**, and it is used everywhere.
 - **Not on the resumes:**
-  - phone, location and LinkedIn: not verified. `resumes/sources/common.typ` has placeholders set to `none`;
-  - a website URL: added once the site is live at the chosen address;
+  - phone and location: `resumes/sources/common.typ` has placeholders set to `none`;
   - the registration number: never published.
+- **On the resumes:** email, GitHub, LinkedIn (`linkedin.com/in/sre-cibi-varsshan-k-34149a287`, supplied by the owner) and the portfolio address `xerfzy.github.io`.
 - **GitHub.** Earlier account handles that still appear in some repository READMEs are not linked. Only `github.com/xerfzy` and `github.com/thenamelessone888` (the TrackMania RL repository) are used.
 
 ## Base URL and hosting
-- `site.config.json` sets `baseUrl` to `https://xerfzy.github.io/`. Canonical links, `og:url`, the sitemap and `robots.txt` use it.
+- The base URL is `https://xerfzy.github.io/`. Canonical links, `og:url`, `sitemap.xml` and `robots.txt` use it.
 - That address only works once this repository is renamed to `xerfzy.github.io`. The rename is the owner's decision and has not been done.
 - All internal links are relative, so the site also works at the repository's current project-site subpath or any other subpath. The 404 page uses root-absolute links, because it is served for missing paths at any depth.
 
@@ -96,3 +96,7 @@ The removed items are still in git history:
 - `js/` (an empty `background.js`, client-side card rendering, scroll-reveal);
 - the placeholder LinkedIn link;
 - `assets/resume.pdf`, superseded by the five generated resumes and recoverable from commit b9898e1.
+
+## Site format
+- The site was first produced by a generator (`scripts/build.mjs` reading `content/*.json`). At the owner's request it is now plain hand-edited HTML: the generator and `content/` were removed, and the generated pages became the source. They are recoverable from commit 28e3a04.
+- Look: black background, green monospace text, one centred column. The header, nav, breadcrumbs, page titles and footer are centred; paragraphs and lists are left-aligned inside the column for readability.
