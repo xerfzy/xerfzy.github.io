@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>Writing — xerf</title>
+<meta name="description" content="Technical notes derived from the source code and recorded results of the projects.">
+<link rel="canonical" href="https://xerfzy.github.io/writing/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="Writing — xerf">
+<meta property="og:description" content="Technical notes derived from the source code and recorded results of the projects.">
+<meta property="og:url" content="https://xerfzy.github.io/writing/">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../whats-new/">What's New?</a> | <a href="../projects/">Projects</a> | <a href="../experiments/">Experiments</a> | <a href="../writing/" aria-current="page">Writing</a> | <a href="../about/">About</a> | <a href="../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../">Top</a> : Writing</p></nav>
+<h1>Writing</h1>
+<p>Technical notes written from the projects' source and recorded results. Each note states what it is based on.</p>
+<ul class="entries">
+<li><a class="t" href="chacha20-on-the-gpu/">ChaCha20 on an OpenGL compute shader</a> — Mapping keystream blocks to compute invocations and an SSBO, plus three problems found on re-reading: dispatch size, unsigned uniforms set with a signed call, and no integrity.
+<span class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on reading the source. Nothing was re-run.</span></li>
+<li><a class="t" href="fragment-vs-compute-ray-marching/">Fragment-shader vs compute-shader ray marching</a> — The same SDF ray marcher in two OpenGL execution models, the dispatch and barrier details that differ, and the int-typed uniform setter that made the compute version stutter.
+<span class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on reading the source. The stutter cause is a diagnosis that has not been re-run yet.</span></li>
+<li><a class="t" href="ffmpeg-pipeline-censface/">How the censface-cpp video pipeline works</a> — Packets vs frames, YUV↔BGR conversion, display rotation, keeping source timestamps, and copying audio without decoding, with the FFmpeg C API.
+<span class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on the source and the project's pipeline notes. The numbers in the last section are hand-run checks recorded in the README.</span></li>
+<li><a class="t" href="td3-trackmania-notes/">TD3 on TrackMania: what the logs show</a> — Behaviour-cloning warm start, the post-warm-up collapse, TD3+BC regularisation, a plateau reported as a plateau, and a policy stuck against one wall.
+<span class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on the experiment manifests and metrics committed in the repository (recorded results, not re-run).</span></li>
+</ul>
+<h2>Elsewhere</h2>
+<ul class="entries">
+<li><a class="t" href="https://github.com/xerfzy/Report-on-ClickFix-Malware-via-Typosquatted-NPTEL-Domain">Threat report: ClickFix malware campaign via typosquatted NPTEL domains</a> — Typosquatted entry points, redirect chain, clipboard-hijack landing page, three decoded PowerShell payload samples, C2 infrastructure, IOCs and an ATT&amp;CK mapping. Payloads were analysed in a VM, not executed.
+<span class="meta"><time datetime="2026-04-19">19 Apr 2026</time> · Security report (GitHub)</span></li>
+</ul>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<h2 id="overview">Overview</h2>
+<p>A command-line tool for Linux. It takes a JPEG, PNG or MP4 and finds heads with a YOLOv8-format ONNX model through OpenCV's DNN module. It then applies a glitch, pixelate or blur effect inside a feathered head-shaped mask. Images are written as JPEG or PNG; video is written as H.264 in MP4. The effects are artistic and are not guaranteed anonymisation, because the detector can miss heads.</p>
+<p>It is a C++17 port of the processing core of an earlier Censface project of mine: an Android app and a Python reference program, neither published. The detector settings, tracker and effect formulas were ported with the same parameters. All video input and output was rewritten against the FFmpeg C libraries.</p>
+
+<h2 id="implementation">Implementation</h2>
+<p>One video goes through a single pass in <code>VideoProcessor</code> (<code>src/video_pipeline.cpp</code>):</p>
+<ol>
+<li><b>Demux and decode.</b> <code>avformat_open_input</code>, <code>av_find_best_stream</code>, then <code>avcodec_send_packet</code>/<code>receive_frame</code> on the video stream.</li>
+<li><b>Convert.</b> libswscale turns the decoded YUV frame into a BGR <code>cv::Mat</code>. Colour matrix and range come from the decoder (<code>sws_setColorspaceDetails</code>).</li>
+<li><b>Rotate.</b> The display matrix from <code>AV_PKT_DATA_DISPLAYMATRIX</code> is applied to the pixels, so phone portrait clips come out upright with no rotation tag.</li>
+<li><b>Detect, track, filter.</b> 640&nbsp;px letterbox, score threshold 0.38, NMS 0.45, up to 64 heads. Boxes are smoothed between frames, and a lost head fades out over 0.18&nbsp;s.</li>
+<li><b>Convert back and encode.</b> BGR goes to <code>yuv420p</code> and into libx264 (<code>veryfast</code>, CRF 18, no B-frames). The encoder uses the <em>input stream's time base</em>, and each frame keeps its <code>best_effort_timestamp</code>, so variable-frame-rate clips keep their timing.</li>
+<li><b>Mux.</b> Audio packets are copied unchanged when <code>avformat_query_codec</code> says MP4 can hold the codec; otherwise the audio is dropped with a warning.</li>
+</ol>
+<p>Only one decoded frame is held at a time, and nothing but the output file is written to disk.</p>
+
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><code>main.cpp</code>: argument parsing, path checks and SIGINT handling (exit 130).</li>
+<li><code>image_pipeline.cpp</code>, <code>video_pipeline.cpp</code>: the two processing paths.</li>
+<li><code>face_detector.cpp</code>: pre- and post-processing around <code>cv::dnn::Net</code>.</li>
+<li><code>filters.cpp</code>: glitch, pixelate and blur, and the mask.</li>
+<li><code>ffmpeg_raii.h</code>: a <code>std::unique_ptr</code> with a custom deleter for each FFmpeg object, so cleanup also happens when an exception unwinds.</li>
+<li><code>scripts/batch.sh</code> mirrors a folder tree into results and per-file logs. <code>scripts/verify_video.sh</code> compares timestamps and audio with ffprobe.</li>
+</ul>
+
+<h2 id="decisions">Technical decisions</h2>
+<ul>
+<li>The original Python program decoded with PyAV and then muxed audio back with an <code>ffmpeg</code> subprocess. This version does demux, decode, convert, encode and mux in one process.</li>
+<li>Inputs are never overwritten. Output goes to a temporary file that is renamed only on success; an existing output needs <code>--overwrite</code>.</li>
+<li>The build uses <code>-Wall -Wextra -Wpedantic</code> and finds FFmpeg through pkg-config, OpenCV through CMake.</li>
+</ul>
+
+<h2 id="validation">Results / Validation</h2>
+<p>Checks recorded in the repository README, run by hand on the development machine (FFmpeg 9.0.2, OpenCV 5.0.0, GCC 16):</p>
+<ul>
+<li>A 2&nbsp;s H.264 and AAC clip: 24 of 24 frames with identical timestamps, audio packets byte-identical by MD5.</li>
+<li>A rotated variable-frame-rate clip: correct output size, no rotation tag, timestamps and duration preserved.</li>
+<li>Peak memory 486&nbsp;MB for a 6&nbsp;s clip and 490&nbsp;MB for the full 29&nbsp;s clip of the same 720p HEVC video. Memory does not grow with length.</li>
+<li>Glitch output against the Python reference: 41.5&nbsp;dB PSNR.</li>
+</ul>
+<p>There is no automated test suite, and processing speed was not benchmarked.</p>
+
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Detection runs on the CPU on every frame, with no frame skipping.</li>
+<li>The head model has false positives and misses.</li>
+<li>Output is always 8-bit H.264 <code>yuv420p</code>. HDR input is rejected.</li>
+<li>Subtitles, data tracks and container metadata are not copied.</li>
+<li>Tested on one Linux distribution only.</li>
+</ul>
+
+<p>Longer walk-through: <a href="{{root}}writing/ffmpeg-pipeline-censface/">How the censface-cpp video pipeline works</a>.</p>

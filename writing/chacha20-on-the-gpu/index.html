@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>ChaCha20 on an OpenGL compute shader — xerf</title>
+<meta name="description" content="Mapping keystream blocks to compute invocations and an SSBO, plus three problems found on re-reading: dispatch size, unsigned uniforms set with a signed call, and no integrity.">
+<link rel="canonical" href="https://xerfzy.github.io/writing/chacha20-on-the-gpu/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="ChaCha20 on an OpenGL compute shader — xerf">
+<meta property="og:description" content="Mapping keystream blocks to compute invocations and an SSBO, plus three problems found on re-reading: dispatch size, unsigned uniforms set with a signed call, and no integrity.">
+<meta property="og:url" content="https://xerfzy.github.io/writing/chacha20-on-the-gpu/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../../whats-new/">What's New?</a> | <a href="../../projects/">Projects</a> | <a href="../../experiments/">Experiments</a> | <a href="../../writing/">Writing</a> | <a href="../../about/">About</a> | <a href="../../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../writing/">Writing</a> : ChaCha20 on an OpenGL compute shader</p></nav>
+<article>
+<h1>ChaCha20 on an OpenGL compute shader</h1>
+<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on reading the source. Nothing was re-run.</p>
+<p>ChaCha20 suits a GPU. Its keystream is a sequence of independent 64-byte blocks, each a pure function of the key, nonce and block counter, built from 32-bit add, rotate and XOR. Any thread can compute any block without talking to another thread. This note walks through how the <a href="../../projects/chacha20-gpu-encryption/">ChaCha20 GPU Image Encryption</a> project maps that onto an OpenGL compute shader. It also covers three problems that turned up when re-reading the code: one is cosmetic, one concerns performance, and one concerns correctness.</p>
+
+<h2 id="state">The state and the quarter-round</h2>
+<p>The block function works on 16 words: four constants (<code>"expand 32-byte k"</code>), eight key words, a 32-bit block counter and three nonce words. That is the RFC&nbsp;8439 layout. In GLSL the state is a <code>uvec4[4]</code>, and the quarter-round is four add-XOR-rotate lines:</p>
+<pre><code>uint rotl(uint x, int n) { return (x &lt;&lt; n) | (x &gt;&gt; (32 - n)); }
+void QR(inout uint a, inout uint b, inout uint c, inout uint d) {
+    a += b; d ^= a; d = rotl(d, 16);
+    c += d; b ^= c; b = rotl(b, 12);
+    a += b; d ^= a; d = rotl(d, 8);
+    c += d; b ^= c; b = rotl(b, 7);
+}</code></pre>
+<p>Ten double rounds (four column quarter-rounds, then four diagonal ones) and the final addition of the input state give one keystream block. GLSL's <code>uint</code> arithmetic wraps modulo 2<sup>32</sup>, which is what the cipher needs.</p>
+
+<h2 id="mapping">Mapping blocks to invocations</h2>
+<p>The plaintext is a batch of decoded images packed into one SSBO (<code>buffer { uint data[]; }</code>), padded to a multiple of 128 bytes. Each invocation produces two consecutive blocks:</p>
+<pre><code>uint id = gl_GlobalInvocationID.x;
+for (int b = 0; b &lt; 2; b++) {
+    state[3] = uvec4(id*2 + b, N1, N2, N3);   // counter, nonce
+    … 20 rounds, add input …
+    uint base_block = id*32 + b*16;          // in 32-bit words
+    for (int i = 0; i &lt; 16; i++) {
+        uint idx = base_block + i;
+        if (idx &gt;= data.length()) break;
+        data[idx] ^= working[i/4][i%4];
+    }
+}</code></pre>
+<p>Encryption and decryption are the same operation, XOR with the keystream, so one shader handles both. The SSBO is read as little-endian 32-bit words, which matches the byte order ChaCha20 specifies when it serialises the keystream.</p>
+
+<h2 id="host">Host side</h2>
+<ol>
+<li>Plan batches from image headers only (<code>stbi_info</code>) against a VRAM budget the user enters.</li>
+<li>Decode one batch into a contiguous buffer, record each image's offset and size, and pad it.</li>
+<li>Generate a fresh 32-byte key and 12-byte nonce with OpenSSL <code>RAND_bytes</code>.</li>
+<li><code>glBufferData</code> → <code>glDispatchCompute</code> → <code>glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT)</code> → <code>glMapBuffer</code>.</li>
+<li>Write <code>[count][metadata][ciphertext]</code> to a <code>.cb</code> file, and the key and nonce to a separate file.</li>
+</ol>
+<p>A new key and nonce per batch matters. The counter restarts at 0 for each batch, and reusing a key and nonce pair across two batches would reuse keystream. A 32-bit counter allows 2<sup>32</sup> × 64 bytes (256&nbsp;GiB) per batch, far more than any VRAM budget.</p>
+
+<h2 id="problems">Problems found on re-reading</h2>
+<h3>1. Dispatch size (performance)</h3>
+<pre><code>glDispatchCompute(ceil(paddedBytes / 256.0), 1, 1);   // local_size_x = 256</code></pre>
+<p>This launches about one invocation per <em>byte</em>. Each invocation covers 128 bytes, so only 1 in 128 invocations has data to touch. The rest run 40 rounds of ChaCha20 for blocks past the end of the buffer before the bounds check discards them. The correct count is <code>ceil(paddedBytes / 128 / 256)</code> work groups. No timing code exists in the project, so the size of this effect has not been measured.</p>
+
+<h3>2. Unsigned uniforms set with a signed call (correctness)</h3>
+<p>The shader declares <code>uniform uint C1 … K8, N1 … N3</code>. The host sets them through a helper that calls <code>glUniform1i</code>. The <code>glUniform</code> reference is explicit: using a signed-integer variant on an <code>unsigned int</code> uniform generates <code>GL_INVALID_OPERATION</code>, and the uniform keeps its previous value, which is 0. The code never calls <code>glGetError</code>. On a conforming driver, every batch would then be encrypted with an all-zero key, nonce and constant block, whatever <code>RAND_bytes</code> produced. Decryption would still "work", because it hits the same error. Some drivers are lenient, and this has not been tested on the original hardware.</p>
+<p>The fix is <code>glUniform1ui</code> (or the 16 state words in a small uniform or storage buffer), plus a known-answer test: run the shader on the RFC&nbsp;8439 block-function test vector and compare. That test would have caught this, and any future regression.</p>
+
+<h3>3. No integrity</h3>
+<p>ChaCha20 alone gives confidentiality, not integrity: flipping a ciphertext bit flips the same plaintext bit. A real file format would add Poly1305 (ChaCha20-Poly1305, as in RFC&nbsp;8439) and authenticate the metadata header as well.</p>
+
+<h2 id="summary">Summary</h2>
+<p>The data-parallel part, keystream blocks to invocations and SSBO in place, is straightforward and matches the cipher well. The problems are at the edges: how many threads to launch, how values reach the shader, and what the file format promises. The first two are one-line fixes. Neither would have survived a test against published vectors.</p>
+
+<p class="meta">Project: <a href="../../projects/chacha20-gpu-encryption/">ChaCha20 GPU Image Encryption</a></p>
+</article>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>CPU Ray Tracer — xerf</title>
+<meta name="description" content="C++ ray tracer built from Ray Tracing in One Weekend: Lambertian, metal and dielectric materials, multi-sample anti-aliasing and defocus blur, written out as PPM.">
+<link rel="canonical" href="https://xerfzy.github.io/projects/cpu-ray-tracer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="CPU Ray Tracer — xerf">
+<meta property="og:description" content="C++ ray tracer built from Ray Tracing in One Weekend: Lambertian, metal and dielectric materials, multi-sample anti-aliasing and defocus blur, written out as PPM.">
+<meta property="og:url" content="https://xerfzy.github.io/projects/cpu-ray-tracer/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../../whats-new/">What's New?</a> | <a href="../../projects/">Projects</a> | <a href="../../experiments/">Experiments</a> | <a href="../../writing/">Writing</a> | <a href="../../about/">About</a> | <a href="../../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../projects/">Projects</a> : <a href="../../projects/graphics/">Graphics and GPU Computing</a> : CPU Ray Tracer</p></nav>
+<h1>CPU Ray Tracer</h1>
+<p class="lede">C++ ray tracer built from Ray Tracing in One Weekend: Lambertian, metal and dielectric materials, multi-sample anti-aliasing and defocus blur, written out as PPM.</p>
+<dl class="facts">
+<dt>Technologies</dt><dd>C++14, Ray tracing, CMake</dd>
+<dt>Period</dt><dd>Nov–Dec 2025</dd>
+<dt>Status</dt><dd>Complete (book 1)</dd>
+<dt>Directory</dt><dd><a href="../../projects/graphics/">Graphics and GPU Computing</a> · Project</dd>
+<dt>Links</dt><dd><a href="https://github.com/xerfzy/Ray_tracer-learning-project-">Source<span class="vh"> for CPU Ray Tracer</span></a></dd>
+</dl>
+<h2 id="overview">Overview</h2>
+<p>A CPU ray tracer in C++ written while working through <cite>Ray Tracing in One Weekend</cite>. It follows the book's structure closely. Where the book's explanations were thin, mainly refraction and the thin-lens camera, other sources were used; they are listed in the repository README. It renders spheres with three materials and writes a PPM image to standard output.</p>
+
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li><b>Camera.</b> Vertical field of view, look-from and look-at placement, and a defocus disk (aperture angle and focus distance) for depth of field.</li>
+<li><b>Sampling.</b> <code>samples_per_pixel</code> jittered rays per pixel, averaged for anti-aliasing. Recursive <code>ray_color</code> up to <code>max_depth</code> bounces. The final scene uses 100 samples per pixel and depth 75 at 1440&nbsp;px wide.</li>
+<li><b>Materials.</b> Lambertian diffuse; metal with a fuzz parameter; dielectric with Snell refraction, a total-internal-reflection check and Schlick's approximation for reflectance. A hollow glass sphere is modelled as a sphere with an inner sphere of inverted index.</li>
+<li><b>Code.</b> Header-only <code>vec3</code>, <code>ray</code>, <code>interval</code>, <code>hittable</code>/<code>hittable_list</code>, <code>sphere</code>, <code>material</code> and <code>camera</code>, built with CMake. <code>std::chrono</code> timing wraps the render loop.</li>
+</ul>
+
+<figure>
+<img src="../../assets/images/cpu-ray-tracer-final.webp" width="960" height="540" loading="lazy" decoding="async" alt="Rendered scene of a glass sphere, a grey diffuse sphere and a fuzzy metal sphere on a blue ground plane, with strong depth-of-field blur.">
+<figcaption>Final render from the repository (<code>output/final.png</code>), downscaled. The heavy blur comes from the defocus angle of 10°.</figcaption>
+</figure>
+
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Single-threaded. There is no BVH, so every ray tests every object.</li>
+<li>Spheres only. Book 1 scope.</li>
+</ul>
+
+<h2 id="source">Source and references</h2>
+<ul class="plain">
+<li>Repository: <a href="https://github.com/xerfzy/Ray_tracer-learning-project-">github.com/xerfzy/Ray_tracer-learning-project-</a></li>
+<li>Related: <a href="../../projects/raymarcher-fragment/">Ray Marcher (OpenGL fragment shader)</a> — Real-time signed-distance-field ray marcher in a GLSL fragment shader, with a free-fly camera and a Sobel edge pass through a framebuffer object.</li>
+</ul>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>

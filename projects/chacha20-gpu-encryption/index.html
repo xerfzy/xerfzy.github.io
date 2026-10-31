@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>ChaCha20 GPU Image Encryption — xerf</title>
+<meta name="description" content="Batch image encryption with ChaCha20 in an OpenGL 4.3 compute shader. Images are packed into one SSBO per VRAM-sized batch and XORed with a GPU-generated keystream.">
+<link rel="canonical" href="https://xerfzy.github.io/projects/chacha20-gpu-encryption/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="ChaCha20 GPU Image Encryption — xerf">
+<meta property="og:description" content="Batch image encryption with ChaCha20 in an OpenGL 4.3 compute shader. Images are packed into one SSBO per VRAM-sized batch and XORed with a GPU-generated keystream.">
+<meta property="og:url" content="https://xerfzy.github.io/projects/chacha20-gpu-encryption/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../../whats-new/">What's New?</a> | <a href="../../projects/">Projects</a> | <a href="../../experiments/">Experiments</a> | <a href="../../writing/">Writing</a> | <a href="../../about/">About</a> | <a href="../../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../projects/">Projects</a> : <a href="../../projects/graphics/">Graphics and GPU Computing</a> : ChaCha20 GPU Image Encryption</p></nav>
+<h1>ChaCha20 GPU Image Encryption</h1>
+<p class="lede">Batch image encryption with ChaCha20 in an OpenGL 4.3 compute shader. Images are packed into one SSBO per VRAM-sized batch and XORed with a GPU-generated keystream.</p>
+<dl class="facts">
+<dt>Technologies</dt><dd>C++17, OpenGL 4.3, GLSL, Compute shaders, SSBO, OpenSSL, Dear ImGui, CMake</dd>
+<dt>Period</dt><dd>Mar–May 2026</dd>
+<dt>Status</dt><dd>Working; key-upload issue open</dd>
+<dt>Directory</dt><dd><a href="../../projects/graphics/">Graphics and GPU Computing</a> · Featured</dd>
+<dt>Links</dt><dd><a href="https://github.com/xerfzy/chacha2020ImageEncryption_using_compute_shader">Source<span class="vh"> for ChaCha20 GPU Image Encryption</span></a></dd>
+</dl>
+<h2 id="overview">Overview</h2>
+<p>A desktop tool that encrypts whole folders of images with the ChaCha20 stream cipher, doing the cipher work in an OpenGL 4.3 compute shader. Images are decoded, packed into one contiguous buffer per batch, uploaded as a Shader Storage Buffer Object (SSBO), encrypted in place on the GPU and read back into a single <code>.cb</code> file per batch. Decryption runs the same shader with the same key and nonce, because XOR with the keystream is its own inverse.</p>
+
+<h2 id="motivation">Problem / Motivation</h2>
+<p>ChaCha20 is built from 32-bit add, rotate and XOR operations, and each 64-byte keystream block depends only on the key, nonce and a block counter. Blocks can therefore be computed independently, which suits a GPU. The project tests that mapping on real image batches, with the CPU doing only file I/O and buffer packing.</p>
+
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li><b>Shader</b> (<code>shaders/chacha_compute.ps</code>, GLSL 4.30). <code>local_size_x = 256</code>; the state constants, key and nonce are passed as uniforms. The quarter-round uses rotations of 16, 12, 8 and 7, followed by 10 double rounds (column, then diagonal) and the feed-forward addition. Each invocation produces two consecutive 64-byte blocks (counter <code>id*2 + b</code>) and XORs 32 words of the SSBO in place, with a bounds check at the end of the buffer.</li>
+<li><b>Batching.</b> The user enters the GPU's VRAM in megabytes. <code>stbi_info</code> reads only image headers to get width × height × channels, and files are grouped into index windows that fit the budget before anything is decoded.</li>
+<li><b>Packing.</b> Each batch is decoded with stb_image into one <code>std::vector&lt;uint8_t&gt;</code>, padded to a 128-byte boundary. Per-image metadata (height, width, channels, size, byte offset) is kept for reconstruction.</li>
+<li><b>GPU round trip.</b> <code>glBufferData(GL_SHADER_STORAGE_BUFFER, …)</code>, <code>glDispatchCompute</code>, <code>glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT)</code>, then <code>glMapBuffer</code> to read the ciphertext back.</li>
+<li><b>Keys.</b> Each batch gets a fresh 256-bit key and 96-bit nonce from OpenSSL <code>RAND_bytes</code>, saved next to the output as <code>N_key.bin</code>.</li>
+<li><b>File format.</b> <code>[image_count][metadata array][padded ciphertext]</code>.</li>
+<li><b>UI.</b> Dear ImGui windows for encrypt, decrypt and logs, with a native folder picker. Source images are never modified.</li>
+</ul>
+
+<h2 id="decisions">Technical decisions</h2>
+<ul>
+<li>Packing every image into one SSBO means one upload, one dispatch and one readback per batch, instead of one per image.</li>
+<li>Planning batches from headers keeps host memory bounded by the VRAM budget, not by the dataset size.</li>
+<li>Builds with CMake on Linux (OpenGL, GLFW, OpenSSL) and with a Visual Studio project on Windows.</li>
+</ul>
+
+<h2 id="limitations">Challenges / Limitations</h2>
+<ul>
+<li><b>Open issue: uniform types.</b> The shader declares the constants, key and nonce as <code>uint</code> uniforms, but the host uploads them through a helper that calls <code>glUniform1i</code>. The OpenGL specification makes loading an unsigned uniform with a signed-integer <code>glUniform</code> call a <code>GL_INVALID_OPERATION</code> that leaves the uniform unchanged, and the code does not check <code>glGetError</code>. On a driver that follows the specification, the keystream would not depend on the key, and round trips would still succeed because both directions use the same state. Some drivers are more lenient, and this has not been tested here. The fix is to upload with <code>glUniform1ui</code> and to check the shader against the RFC&nbsp;8439 test vectors. Until then the output should be treated as unverified.</li>
+<li><b>Dispatch size.</b> The host dispatches <code>ceil(bytes / 256)</code> work groups of 256 invocations, about one invocation per byte. Each invocation covers 128 bytes, so most invocations compute blocks past the end of the buffer and discard them. Dispatching <code>ceil(bytes / 128 / 256)</code> groups would remove that work. This is the next change.</li>
+<li><b>No authentication.</b> ChaCha20 alone gives confidentiality, not integrity. There is no MAC (for example Poly1305), so tampering with a <code>.cb</code> file is not detected.</li>
+<li>Key files are written in plain form next to the output. Protecting them is left to the user.</li>
+<li>The repository also contains build outputs and Windows libraries.</li>
+</ul>
+
+<h2 id="validation">Results / Validation</h2>
+<p>The README describes the encrypt and decrypt round trip as working. Decryption writes each image back as PNG with <code>stbi_write_png</code>. Pixel data is restored, but the original file encoding (for example JPEG) and metadata are not.</p>
+<p>The README also reports 200–500&nbsp;MB/s on an RTX 3050 (6&nbsp;GB). That figure is not backed by timing code in the repository, so it is not presented here as a measured result.</p>
+
+<p>Longer walk-through: <a href="../../writing/chacha20-on-the-gpu/">ChaCha20 on an OpenGL compute shader</a>.</p>
+
+<h2 id="source">Source and references</h2>
+<ul class="plain">
+<li>Repository: <a href="https://github.com/xerfzy/chacha2020ImageEncryption_using_compute_shader">github.com/xerfzy/chacha2020ImageEncryption_using_compute_shader</a></li>
+<li>Article: <a href="../../writing/chacha20-on-the-gpu/">ChaCha20 on an OpenGL compute shader</a></li>
+<li>Related: <a href="../../projects/raymarcher-fragment/">Ray Marcher (OpenGL fragment shader)</a> — Real-time signed-distance-field ray marcher in a GLSL fragment shader, with a free-fly camera and a Sobel edge pass through a framebuffer object.</li>
+<li>Related: <a href="https://github.com/xerfzy/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-">Ray Marcher (compute shader demo)</a> — Ray marching moved into an OpenGL compute shader that writes an RGBA32F image, shown on a full-screen quad. The animation stutters; the likely cause is a uniform setter that truncates float time values to int (not yet fixed).</li>
+</ul>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>

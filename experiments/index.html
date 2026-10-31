@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>Experiments and Archive — xerf</title>
+<meta name="description" content="Prototypes, learning exercises, coursework and older work, newest first.">
+<link rel="canonical" href="https://xerfzy.github.io/experiments/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="Experiments and Archive — xerf">
+<meta property="og:description" content="Prototypes, learning exercises, coursework and older work, newest first.">
+<meta property="og:url" content="https://xerfzy.github.io/experiments/">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/filter.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../whats-new/">What's New?</a> | <a href="../projects/">Projects</a> | <a href="../experiments/" aria-current="page">Experiments</a> | <a href="../writing/">Writing</a> | <a href="../about/">About</a> | <a href="../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../">Top</a> : Experiments and Archive</p></nav>
+<h1>Experiments and Archive</h1>
+<p>Prototypes, learning exercises, coursework and older work, newest first.</p>
+<div class="filter" id="filter">
+<label for="q">Search</label> <input type="search" id="q" autocomplete="off" spellcheck="false">
+<label for="cat">Category</label> <select id="cat"><option value="">All</option><option value="systems">C++ and Systems</option><option value="graphics">Graphics and GPU Computing</option><option value="games">Games and Interactive Software</option><option value="ai">AI and Machine Learning</option><option value="robotics">Robotics and Embedded Systems</option><option value="web">Web and Other Software</option></select>
+<output id="count" for="q cat" aria-live="polite">12 entries</output>
+</div>
+<ol class="entries" id="list">
+<li data-cat="graphics" data-text="learning-vulkan vulkan-hpp (raii) setup following the vulkan tutorial: instance, validation messenger, devices, surface, swapchain, image views and a slang shader module. c++ vulkan vulkan-hpp slang spir-v cmake graphics and gpu computing experiment"><a class="t" href="https://github.com/xerfzy/learning-vulkan">learning-vulkan</a> (2026) <em class="tier">Experiment</em> — Vulkan-Hpp (RAII) setup following the Vulkan tutorial: instance, validation messenger, devices, surface, swapchain, image views and a Slang shader module.
+<span class="meta"><a href="../projects/graphics/">Graphics and GPU Computing</a> · Learning; pipeline setup in progress</span></li>
+<li data-cat="ai" data-text="legal case similarity (xai v2) retrieval pipeline over a six-case demo corpus: sentencetransformer embeddings, faiss, cross-encoder reranking, a networkx similarity graph and shap/lime explanations. python sentence-transformers faiss networkx shap lime streamlit pytest ai and machine learning experiment"><a class="t" href="https://github.com/xerfzy/xai-v2">Legal Case Similarity (XAI v2)</a> (2026) <em class="tier">Experiment</em> — Retrieval pipeline over a six-case demo corpus: SentenceTransformer embeddings, FAISS, cross-encoder reranking, a NetworkX similarity graph and SHAP/LIME explanations.
+<span class="meta"><a href="../projects/ai/">AI and Machine Learning</a> · Prototype on demo data</span></li>
+<li data-cat="ai" data-text="space shooter dqn pygame space shooter with a dueling double dqn agent trained on stacked 84×84 grayscale frames. python pytorch dqn cnn pygame ai and machine learning coursework"><a class="t" href="https://github.com/xerfzy/Space_shooter_using_DQN_vc">Space Shooter DQN</a> (2026) <em class="tier">Coursework</em> — Pygame space shooter with a Dueling Double DQN agent trained on stacked 84×84 grayscale frames.
+<span class="meta"><a href="../projects/ai/">AI and Machine Learning</a> · Complete (course review)</span></li>
+<li data-cat="graphics" data-text="ray marcher (compute shader demo) ray marching moved into an opengl compute shader that writes an rgba32f image, shown on a full-screen quad. the animation stutters; the likely cause is a uniform setter that truncates float time values to int (not yet fixed). c++ opengl glsl compute shaders graphics and gpu computing experiment"><a class="t" href="https://github.com/xerfzy/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-">Ray Marcher (compute shader demo)</a> (2026) <em class="tier">Experiment</em> — Ray marching moved into an OpenGL compute shader that writes an RGBA32F image, shown on a full-screen quad. The animation stutters; the likely cause is a uniform setter that truncates float time values to int (not yet fixed).
+<span class="meta"><a href="../projects/graphics/">Graphics and GPU Computing</a> · Demo with a known issue</span></li>
+<li data-cat="graphics" data-text="learning-opengl learnopengl exercises covering shaders, textures and transformation matrices. c++ opengl glsl graphics and gpu computing experiment"><a class="t" href="https://github.com/xerfzy/learning-opengl">learning-opengl</a> (2025) <em class="tier">Experiment</em> — LearnOpenGL exercises covering shaders, textures and transformation matrices.
+<span class="meta"><a href="../projects/graphics/">Graphics and GPU Computing</a> · Learning exercise</span></li>
+<li data-cat="robotics" data-text="esp32-cam orb features esp32-cam streams mjpeg over wi-fi; a python client extracts and draws orb keypoints on each frame. feature extraction only; no tracking or mapping. esp32 arduino python opencv orb robotics and embedded systems experiment"><a class="t" href="https://github.com/xerfzy/ESP32-PYTHON-ORB-SLAM-VC">ESP32-CAM ORB Features</a> (2025) <em class="tier">Experiment</em> — ESP32-CAM streams MJPEG over Wi-Fi; a Python client extracts and draws ORB keypoints on each frame. Feature extraction only; no tracking or mapping.
+<span class="meta"><a href="../projects/robotics/">Robotics and Embedded Systems</a> · Experiment</span></li>
+<li data-cat="web" data-text="knapsack visualisation react visualiser that fills the 0/1 knapsack dp table step by step, backtracks the chosen items and compares the fractional greedy method. react javascript dynamic programming vite web and other software coursework"><a class="t" href="https://github.com/xerfzy/Knapsack_visualisation-v-">Knapsack Visualisation</a> (2025) <em class="tier">Coursework</em> — React visualiser that fills the 0/1 knapsack DP table step by step, backtracks the chosen items and compares the fractional greedy method.
+<span class="meta"><a href="../projects/web/">Web and Other Software</a> · Complete (coursework) · <a href="https://youtu.be/R5Be_uv9l-o">Video<span class="vh"> of Knapsack Visualisation</span></a></span></li>
+<li data-cat="ai" data-text="breast cancer histopathology classification jupyter comparison of cnn, resnet, vit and swin classifiers on breast histopathology images at 40×–400× magnification (tensorflow/keras). python tensorflow keras cnn vit swin transformer ai and machine learning coursework"><a class="t" href="https://github.com/xerfzy/Breast_cancer_calssification-vc-">Breast Cancer Histopathology Classification</a> (2025) <em class="tier">Coursework</em> — Jupyter comparison of CNN, ResNet, ViT and Swin classifiers on breast histopathology images at 40×–400× magnification (TensorFlow/Keras).
+<span class="meta"><a href="../projects/ai/">AI and Machine Learning</a> · Complete (coursework)</span></li>
+<li data-cat="ai" data-text="image guessing game flask app around a local stable diffusion pipeline: generates styled images, and runs a game where the player describes a generated image and is scored by minilm embedding similarity. python flask diffusers stable diffusion sentence-transformers ai and machine learning archive"><a class="t" href="https://github.com/xerfzy/Image-gen">Image Guessing Game</a> (2025) <em class="tier">Archive</em> — Flask app around a local Stable Diffusion pipeline: generates styled images, and runs a game where the player describes a generated image and is scored by MiniLM embedding similarity.
+<span class="meta"><a href="../projects/ai/">AI and Machine Learning</a> · Archived</span></li>
+<li data-cat="web" data-text="novr (team project) team react and express storefront prototype with jwt login and garment mock-ups. contributed the image-generation feature on the enso page. react node.js express mysql jwt team project web and other software archive"><a class="t" href="https://github.com/xerfzy/Novr">Novr (team project)</a> (2025) <em class="tier">Archive</em> — Team React and Express storefront prototype with JWT login and garment mock-ups. Contributed the image-generation feature on the Enso page.
+<span class="meta"><a href="../projects/web/">Web and Other Software</a> · Archived</span></li>
+<li data-cat="systems" data-text="dsa_h (team c library) team c library of data structures. contributed the binary search tree and deletion for singly and doubly linked lists. c data structures team project c++ and systems archive"><a class="t" href="https://github.com/xerfzy/DSA_H">DSA_H (team C library)</a> (2024) <em class="tier">Archive</em> — Team C library of data structures. Contributed the binary search tree and deletion for singly and doubly linked lists.
+<span class="meta"><a href="../projects/systems/">C++ and Systems</a> · Archived; fork of a team repository</span></li>
+<li data-cat="games" data-text="fps movement controller custom first-person controller in unity with post-processing shader effects. only a demo video is published; the source is not public. unity c# games and interactive software experiment"><a class="t" href="https://youtu.be/c5Gg8ksg7hw">FPS Movement Controller</a> (Undated) <em class="tier">Experiment</em> — Custom first-person controller in Unity with post-processing shader effects. Only a demo video is published; the source is not public.
+<span class="meta"><a href="../projects/games/">Games and Interactive Software</a> · Video only</span></li>
+</ol>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>

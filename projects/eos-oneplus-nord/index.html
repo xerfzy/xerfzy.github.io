@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>eos-oneplus-nord — xerf</title>
+<meta name="description" content="Bash scripts that check downloads, device identity and firmware before running the official /e/OS installer on a OnePlus Nord AC2001, with a guarded flash wrapper and Magisk rooting notes.">
+<link rel="canonical" href="https://xerfzy.github.io/projects/eos-oneplus-nord/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="eos-oneplus-nord — xerf">
+<meta property="og:description" content="Bash scripts that check downloads, device identity and firmware before running the official /e/OS installer on a OnePlus Nord AC2001, with a guarded flash wrapper and Magisk rooting notes.">
+<meta property="og:url" content="https://xerfzy.github.io/projects/eos-oneplus-nord/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../../whats-new/">What's New?</a> | <a href="../../projects/">Projects</a> | <a href="../../experiments/">Experiments</a> | <a href="../../writing/">Writing</a> | <a href="../../about/">About</a> | <a href="../../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../projects/">Projects</a> : <a href="../../projects/systems/">C++ and Systems</a> : eos-oneplus-nord</p></nav>
+<h1>eos-oneplus-nord</h1>
+<p class="lede">Bash scripts that check downloads, device identity and firmware before running the official /e/OS installer on a OnePlus Nord AC2001, with a guarded flash wrapper and Magisk rooting notes.</p>
+<dl class="facts">
+<dt>Technologies</dt><dd>Bash, Linux, adb, fastboot, SHA-256, systemd, Android</dd>
+<dt>Period</dt><dd>Oct 2026</dd>
+<dt>Status</dt><dd>Used for one install; flash scripts not re-run since generalising</dd>
+<dt>Directory</dt><dd><a href="../../projects/systems/">C++ and Systems</a> · Featured</dd>
+<dt>Links</dt><dd><a href="https://github.com/xerfzy/eos-oneplus-nord">Source<span class="vh"> for eos-oneplus-nord</span></a></dd>
+</dl>
+<h2 id="overview">Overview</h2>
+<p>Scripts and notes for installing /e/OS 4.4.1 (Android 16) on a OnePlus Nord AC2001 (<code>avicii</code>) from Linux, then rooting it with Magisk v31.1. The flash itself is done by the official /e/OS factory image and its installer script, run unchanged. The scripts here handle the work the official guide leaves to the user: verifying downloads, proving the right phone is attached, auditing the installer before it runs, and refusing to flash when something does not match.</p>
+
+<h2 id="motivation">Problem / Motivation</h2>
+<p>Unlocking the bootloader and flashing erase the phone. A wrong image, a truncated 2.1&nbsp;GB download or a second attached device can leave a phone unbootable. Every step that can be checked without touching the phone is checked on the laptop first, and the one destructive step needs an explicit confirmation tied to the device serial.</p>
+
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li><b>Downloads</b> (<code>dl-worker.sh</code>, <code>start-downloads.sh</code>). A resumable <code>curl -C -</code> loop with exponential back-off, capped at 300&nbsp;s, started as systemd user units. A file gets its final name only after its size and SHA-256 match the published values.</li>
+<li><b>Device checks</b> (<code>01</code>, <code>02</code>, <code>04</code>). Read-only <code>adb shell getprop</code> checks: the model and serial match <code>config.env</code>; stock Android 12 (SDK 31); an official <code>user</code>/<code>release-keys</code> build; battery above 50%; OEM unlocking enabled; no accounts signed in. Every script stops if a phone listed in <code>PROTECTED_SERIALS</code> is connected.</li>
+<li><b>Installer audit</b> (<code>05-prepare-eos-flash.sh</code>). Unzips into a staging folder, checks that <code>flash_avicii_factory.sh</code> and <code>factory.common</code> are byte-identical to the audited copies, and confirms every image the installer names is present. It evaluates only the installer's image-list assignments, not the script, and prints exactly what will be written to which slots.</li>
+<li><b>Guarded flash</b> (<code>06-flash-eos.sh --erase-and-flash</code>). Requires the prepare step's marker file, exactly one device in fastboot, <code>getvar product</code> matching the expected platform, <code>unlocked=yes</code> and a clean update-merge state. Then the user must type <code>ERASE &lt;serial&gt;</code> before the official installer runs, with output logged.</li>
+</ul>
+<p>Pinned versions and hashes live in one file (<code>scripts/lib.sh</code>). Everything the scripts write is git-ignored.</p>
+
+<h2 id="validation">Results / Validation</h2>
+<p>On 30 Oct 2026, earlier versions of these scripts installed /e/OS on an AC2001 (India) running OxygenOS 12.1. The official installer took about three minutes and the phone booted into /e/OS. The published versions were generalised afterwards (serial in <code>config.env</code>, a protected-phones list, the <code>--erase-and-flash</code> flag). The laptop-side scripts were re-tested; steps 01, 02 and 06 have not been run against a phone again since.</p>
+
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Covers one device model and one /e/OS build. Moving to a new build means updating the pinned URL, size and hashes and re-reading the new installer.</li>
+<li>The India model receives EU (AC2003) firmware from the /e/OS package. /e/OS lists the AC2001 as supported, but no official source covers rollback protection across regions. The firmware check prints this as a warning.</li>
+<li>Not official /e/OS or Magisk software.</li>
+</ul>
+
+<h2 id="source">Source and references</h2>
+<ul class="plain">
+<li>Repository: <a href="https://github.com/xerfzy/eos-oneplus-nord">github.com/xerfzy/eos-oneplus-nord</a></li>
+<li>Related: <a href="../../projects/censface-cpp/">censface-cpp</a> — Linux command-line tool that finds heads in photos and MP4 videos and applies glitch, pixelate or blur effects. Video I/O uses the FFmpeg C API; detection uses OpenCV DNN.</li>
+<li>Related: <a href="../../projects/xrivenixai/">XrivenixAI</a> — Offline Android assistant that runs GGUF language models on the phone through llama.cpp and JNI, with a Compose UI and a model-independent memory in Room/SQLite (FTS5).</li>
+</ul>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>

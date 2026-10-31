@@ -1,0 +1,45 @@
+<h2 id="overview">Overview</h2>
+<p>An Android app that runs large language models on the phone's CPU. There is no account, no backend and no cloud inference. Conversations and a long-term memory about the user are stored in a local SQLite database that is separate from the model, so switching or deleting a model keeps what the assistant remembers. The network is used only to download a model, after an explicit confirmation. The app label and APK are named "XrvinexAI".</p>
+
+<div class="figs">
+<figure>
+<img src="{{root}}assets/images/xrivenixai-chat.webp" width="240" height="536" loading="lazy" decoding="async" alt="Chat screen with Qwen 2.5 3B Instruct selected, showing a short conversation and a reply streaming in.">
+<figcaption>Chat (from the repository's screenshots).</figcaption>
+</figure>
+<figure>
+<img src="{{root}}assets/images/xrivenixai-memory.webp" width="240" height="536" loading="lazy" decoding="async" alt="Memory screen listing two automatically saved user facts, each with category, date and importance.">
+<figcaption>Memories extracted from that chat.</figcaption>
+</figure>
+</div>
+
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><b>Native layer</b> (<code>app/src/main/cpp/pocketai.cpp</code>). A JNI bridge to llama.cpp, which is a git submodule built with the NDK and CMake for <code>arm64-v8a</code>. It loads GGUF models, runs streaming generation on a main context, and runs grammar-constrained completion and embeddings on an auxiliary context. Between turns it trims the KV cache with <code>llama_memory_seq_rm</code>, so a follow-up message processes only its new tokens.</li>
+<li><b>Kotlin layers.</b> <code>chat/</code> (turn orchestration, layered system prompt); <code>knowledge/</code> (query routing, hybrid retrieval, memory extraction and validation); <code>model/</code> (catalog, device-suitability rating, resumable downloads with SHA-256 checks); <code>device/</code> (RAM, storage and CPU-feature profiling).</li>
+<li><b>Storage.</b> A Room database with migrations 1→4. Messages, memories and entities have FTS5 virtual tables (<code>porter unicode61</code> tokenizer).</li>
+<li><b>UI.</b> Jetpack Compose with Material 3: Chat, Models, Memory and Settings screens, Markdown and LaTeX rendering, and streaming with a stop button.</li>
+</ul>
+
+<h2 id="implementation">Implementation: the memory path</h2>
+<ol>
+<li>A router decides whether a message needs memories, older conversation or a date range. Small talk and general questions need none.</li>
+<li>Retrieval merges vector similarity (a bundled bge-small embedding model), FTS5 full-text matches and entity links into one score. Only memories above a per-route threshold are added to the prompt, at most six.</li>
+<li>After the reply, candidate memories come from both fixed rules and the model. Code then validates them: a candidate must be grounded in what the user said, duplicates are removed, and a new fact in the same topic slot (for example, where the user lives) replaces the old one, which is kept as history.</li>
+</ol>
+<p>Model loading, generation and extraction share one serialised native dispatcher, so only one chat model is ever in memory.</p>
+
+<h2 id="validation">Results / Validation</h2>
+<p>Measured by the author on a OnePlus Nord CE 3 5G (Snapdragon 782G, 8&nbsp;GB) with Qwen 2.5 3B Instruct Q4_K_M on 4 threads, as recorded in the README:</p>
+<ul>
+<li>Model load about 10–12&nbsp;s; resident memory about 3.2&nbsp;GB after load.</li>
+<li>Prompt processing about 15–20 tokens/s; generation about 5–6 tokens/s sustained over 5 × 128 tokens.</li>
+<li>Time to first token about 1.8&nbsp;s for a follow-up message with KV-cache reuse, against about 7&nbsp;s without.</li>
+</ul>
+<p>The repository has 30 JVM unit-test methods (memory logic, suitability rating, math normalisation) and 29 instrumented test and benchmark methods (retrieval, migrations, model switching, a performance benchmark). Three of the twelve catalog models were tested on a device.</p>
+
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>CPU inference only. The README's thread sweep found 3 threads faster than the default 4, and the default has not been changed yet.</li>
+<li>Android's default backup rules are left on, so app data can be included in a Google device backup if the user has that enabled.</li>
+<li>Distributed as an APK on GitHub, not through an app store.</li>
+</ul>

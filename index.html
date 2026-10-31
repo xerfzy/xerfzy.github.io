@@ -1,187 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Orion — Graphics, GPU & Game Programming</title>
-  <meta
-    name="description"
-    content="Orion — C++, computer graphics, GPU programming and game development."
-  >
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Forum&family=Raleway:wght@300;400;500;600&display=swap"
-    rel="stylesheet"
-  >
-
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/responsive.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>xerf — A Guide to My Work</title>
+<meta name="description" content="Directory of software projects by xerf: C++ and systems, graphics and GPU, Android, games, machine learning, robotics and web.">
+<link rel="canonical" href="https://xerfzy.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="xerf — A Guide to My Work">
+<meta property="og:description" content="Directory of software projects by xerf: C++ and systems, graphics and GPU, Android, games, machine learning, robotics and web.">
+<meta property="og:url" content="https://xerfzy.github.io/">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./assets/css/site.css">
 </head>
-
 <body>
-
-<canvas id="bg-canvas" aria-hidden="true"></canvas>
-
-<header class="site-header">
-  <div class="container header-inner">
-
-    <a href="index.html" class="site-title">Orion</a>
-
-    <nav>
-      <ul class="site-nav">
-        <li><a href="index.html" aria-current="page">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="blog.html">Blog</a></li>
-      </ul>
-    </nav>
-
-  </div>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<h1><a href="./" aria-current="page">xerf</a> — A Guide to My Work</h1>
+<p class="tagline">KISP — Keep It Secure, Performant.</p>
+<nav class="main" aria-label="Main"><p>[ <a href="./whats-new/">What's New?</a> | <a href="./projects/">Projects</a> | <a href="./experiments/">Experiments</a> | <a href="./writing/">Writing</a> | <a href="./about/">About</a> | <a href="./resumes/">Resumes</a> ]</p></nav>
 </header>
-
-
-<main>
-
-  <div class="container">
-
-    <!-- HERO -->
-
-    <section class="hero section">
-
-      <p class="eyebrow">C++ · Graphics · GPU · Games</p>
-
-      <h1>
-        Building things<br>
-        close to the machine.
-      </h1>
-
-      <p class="hero-copy">
-        Computer graphics, GPU programming and game systems.
-        Mostly C++, with an interest in understanding how things
-        work all the way down.
-      </p>
-
-      <div class="hero-links">
-        <a class="btn btn-primary" href="projects.html">
-          View projects
-        </a>
-
-        <a class="text-link" href="resume.html">
-          Resume →
-        </a>
-      </div>
-
-    </section>
-
-
-    <!-- SELECTED WORK -->
-
-    <section class="section">
-
-      <div class="section-heading">
-        <p class="eyebrow">Selected work</p>
-      </div>
-
-      <div class="project-grid" id="featured-projects"></div>
-
-      <a class="view-all" href="projects.html">
-        All projects →
-      </a>
-
-    </section>
-
-
-    <!-- FOCUS -->
-
-    <section class="section focus-section reveal">
-
-      <div>
-        <p class="eyebrow">Current Focus</p>
-
-        <h2>
-          Rendering, GPU Compute<br>
-          and Game Systems
-        </h2>
-      </div>
-
-      <p>
-        I'm currently building with Vulkan, experimenting with GPU
-        compute and developing games in Unity and Unreal.
-      </p>
-
-    </section>
-
-
-    <!-- ELSEWHERE -->
-
-    <section class="section">
-
-      <p class="eyebrow">Elsewhere</p>
-
-      <ul class="link-row reveal">
-
-        <li>
-          <a
-            href="https://github.com/Orion2726"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="https://www.linkedin.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            LinkedIn
-          </a>
-        </li>
-
-        <li>
-          <a href="mailto:srecibi9@gmail.com">
-            Email
-          </a>
-        </li>
-
-      </ul>
-
-    </section>
-
-  </div>
-
+<hr>
+<main id="main">
+<h2 class="vh">Project directories</h2>
+<ul class="dir">
+<li><a href="./projects/systems/">C++ and Systems</a> <span class="n">(3)</span> <span class="new">new</span></li>
+<li><a href="./projects/graphics/">Graphics and GPU Computing</a> <span class="n">(6)</span></li>
+<li><a href="./projects/mobile/">Android and Mobile</a> <span class="n">(2)</span> <span class="new">new</span></li>
+<li><a href="./projects/games/">Games and Interactive Software</a> <span class="n">(3)</span></li>
+<li><a href="./projects/ai/">AI and Machine Learning</a> <span class="n">(5)</span></li>
+<li><a href="./projects/robotics/">Robotics and Embedded Systems</a> <span class="n">(2)</span></li>
+<li><a href="./projects/web/">Web and Other Software</a> <span class="n">(2)</span></li>
+</ul>
+<hr>
+<h2>Other directories</h2>
+<ul class="dir">
+<li><a href="./research/">Research and Publications</a> <span class="n">(3)</span></li>
+<li><a href="./experiments/">Experiments and Archive</a> <span class="n">(12)</span></li>
+</ul>
+<hr>
+<h2>Recently updated</h2>
+<ul class="plain">
+<li><time datetime="2026-10-31">31 Oct 2026</time> — <a href="./projects/censface-cpp/">censface-cpp</a>: Published: C++17 head-detection and video-effects tool using the FFmpeg C API and OpenCV.</li>
+<li><time datetime="2026-10-30">30 Oct 2026</time> — <a href="./projects/eos-oneplus-nord/">eos-oneplus-nord</a>: Published: verified /e/OS install scripts for the OnePlus Nord AC2001.</li>
+<li><time datetime="2026-10-15">15 Oct 2026</time> — <a href="https://github.com/xerfzy/AgriEdge">AgriEdge (team project)</a>: Bluetooth LE alert relay working on Android, live mandi prices and a deployed server control panel.</li>
+</ul>
 </main>
-
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-
-    <span>
-      &copy; <span id="year"></span> Orion
-    </span>
-
-    <a
-      href="https://github.com/Orion2726"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      github.com/Orion2726
-    </a>
-
-  </div>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="./resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
 </footer>
-
-
-<script src="js/background.js"></script>
-<script src="js/projects.js"></script>
-<script src="js/main.js"></script>
-<script src="js/reveal.js"></script>
-
 </body>
 </html>

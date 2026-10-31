@@ -1,0 +1,24 @@
+<h2 id="overview">Overview</h2>
+<p>Scripts and notes for installing /e/OS 4.4.1 (Android 16) on a OnePlus Nord AC2001 (<code>avicii</code>) from Linux, then rooting it with Magisk v31.1. The flash itself is done by the official /e/OS factory image and its installer script, run unchanged. The scripts here handle the work the official guide leaves to the user: verifying downloads, proving the right phone is attached, auditing the installer before it runs, and refusing to flash when something does not match.</p>
+
+<h2 id="motivation">Problem / Motivation</h2>
+<p>Unlocking the bootloader and flashing erase the phone. A wrong image, a truncated 2.1&nbsp;GB download or a second attached device can leave a phone unbootable. Every step that can be checked without touching the phone is checked on the laptop first, and the one destructive step needs an explicit confirmation tied to the device serial.</p>
+
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li><b>Downloads</b> (<code>dl-worker.sh</code>, <code>start-downloads.sh</code>). A resumable <code>curl -C -</code> loop with exponential back-off, capped at 300&nbsp;s, started as systemd user units. A file gets its final name only after its size and SHA-256 match the published values.</li>
+<li><b>Device checks</b> (<code>01</code>, <code>02</code>, <code>04</code>). Read-only <code>adb shell getprop</code> checks: the model and serial match <code>config.env</code>; stock Android 12 (SDK 31); an official <code>user</code>/<code>release-keys</code> build; battery above 50%; OEM unlocking enabled; no accounts signed in. Every script stops if a phone listed in <code>PROTECTED_SERIALS</code> is connected.</li>
+<li><b>Installer audit</b> (<code>05-prepare-eos-flash.sh</code>). Unzips into a staging folder, checks that <code>flash_avicii_factory.sh</code> and <code>factory.common</code> are byte-identical to the audited copies, and confirms every image the installer names is present. It evaluates only the installer's image-list assignments, not the script, and prints exactly what will be written to which slots.</li>
+<li><b>Guarded flash</b> (<code>06-flash-eos.sh --erase-and-flash</code>). Requires the prepare step's marker file, exactly one device in fastboot, <code>getvar product</code> matching the expected platform, <code>unlocked=yes</code> and a clean update-merge state. Then the user must type <code>ERASE &lt;serial&gt;</code> before the official installer runs, with output logged.</li>
+</ul>
+<p>Pinned versions and hashes live in one file (<code>scripts/lib.sh</code>). Everything the scripts write is git-ignored.</p>
+
+<h2 id="validation">Results / Validation</h2>
+<p>On 30 Oct 2026, earlier versions of these scripts installed /e/OS on an AC2001 (India) running OxygenOS 12.1. The official installer took about three minutes and the phone booted into /e/OS. The published versions were generalised afterwards (serial in <code>config.env</code>, a protected-phones list, the <code>--erase-and-flash</code> flag). The laptop-side scripts were re-tested; steps 01, 02 and 06 have not been run against a phone again since.</p>
+
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Covers one device model and one /e/OS build. Moving to a new build means updating the pinned URL, size and hashes and re-reading the new installer.</li>
+<li>The India model receives EU (AC2003) firmware from the /e/OS package. /e/OS lists the AC2001 as supported, but no official source covers rollback protection across regions. The firmware check prints this as a warning.</li>
+<li>Not official /e/OS or Magisk software.</li>
+</ul>

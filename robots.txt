@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://xerfzy.github.io/sitemap.xml

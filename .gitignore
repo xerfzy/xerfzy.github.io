@@ -1,0 +1,18 @@
+# private working notes (never publish)
+Text File.txt
+
+# tooling output
+node_modules/
+test-results/
+playwright-report/
+.lighthouse/
+*.log
+
+# editor / OS
+.DS_Store
+*~
+*.swp
+*.un~
+
+# local check patterns (contain private identifiers)
+.private-patterns

@@ -1,0 +1,28 @@
+[
+  {
+    "file": "Sre_Cibi_Varsshan_Software_Engineer.pdf",
+    "title": "Software Engineering",
+    "focus": "General software engineering: C++, Linux, application architecture, debugging and testing across native, mobile and graphics projects.",
+    "default": true
+  },
+  {
+    "file": "Sre_Cibi_Varsshan_CPP_Systems_Graphics.pdf",
+    "title": "C++, Linux, Systems, Graphics and GPU",
+    "focus": "C++ and native development, FFmpeg video processing, OpenGL/GLSL rendering and compute shaders."
+  },
+  {
+    "file": "Sre_Cibi_Varsshan_Android_Developer.pdf",
+    "title": "Android and Mobile",
+    "focus": "Kotlin, Jetpack Compose, Room/SQLite, JNI with llama.cpp, offline-first design, Bluetooth LE (Flutter team project)."
+  },
+  {
+    "file": "Sre_Cibi_Varsshan_Game_Programmer.pdf",
+    "title": "Game Programming (Unity)",
+    "focus": "Unity and C# gameplay systems, Rigidbody movement, camera systems, URP/HLSL post-processing, WebGL builds, game AI."
+  },
+  {
+    "file": "Sre_Cibi_Varsshan_ML_Engineer.pdf",
+    "title": "AI / ML and Reinforcement Learning",
+    "focus": "PyTorch, TD3 and DQN, behaviour cloning, model evaluation, on-device inference, computer vision coursework."
+  }
+]

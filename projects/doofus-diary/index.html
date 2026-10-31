@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="light">
+<title>Doofus Diary — xerf</title>
+<meta name="description" content="Unity 3D platform-survival prototype made for the Hitwicket game-developer challenge: timed platforms, score-based jump unlocks, a spring-damper camera and JSON-driven tuning.">
+<link rel="canonical" href="https://xerfzy.github.io/projects/doofus-diary/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="xerf — A Guide to My Work">
+<meta property="og:title" content="Doofus Diary — xerf">
+<meta property="og:description" content="Unity 3D platform-survival prototype made for the Hitwicket game-developer challenge: timed platforms, score-based jump unlocks, a spring-damper camera and JSON-driven tuning.">
+<meta property="og:url" content="https://xerfzy.github.io/projects/doofus-diary/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<p class="site"><a href="../../">xerf</a> — A Guide to My Work</p>
+<nav class="main" aria-label="Main"><p>[ <a href="../../whats-new/">What's New?</a> | <a href="../../projects/">Projects</a> | <a href="../../experiments/">Experiments</a> | <a href="../../writing/">Writing</a> | <a href="../../about/">About</a> | <a href="../../resumes/">Resumes</a> ]</p></nav>
+</header>
+<hr>
+<main id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../projects/">Projects</a> : <a href="../../projects/games/">Games and Interactive Software</a> : Doofus Diary</p></nav>
+<h1>Doofus Diary</h1>
+<p class="lede">Unity 3D platform-survival prototype made for the Hitwicket game-developer challenge: timed platforms, score-based jump unlocks, a spring-damper camera and JSON-driven tuning.</p>
+<dl class="facts">
+<dt>Technologies</dt><dd>Unity, C#, Rigidbody physics, WebGL</dd>
+<dt>Period</dt><dd>Aug 2026</dd>
+<dt>Status</dt><dd>Playable WebGL build</dd>
+<dt>Directory</dt><dd><a href="../../projects/games/">Games and Interactive Software</a> · Project</dd>
+<dt>Links</dt><dd><a href="https://github.com/xerfzy/HW_2026_Test">Source<span class="vh"> for Doofus Diary</span></a> · <a href="https://xerfzy.github.io/HW_2026_Test/Build/">Play in browser<span class="vh"> Doofus Diary</span></a> · <a href="https://youtu.be/jcMOrFb_ZHk">Video<span class="vh"> of Doofus Diary</span></a></dd>
+</dl>
+<h2 id="overview">Overview</h2>
+<p>A small Unity 3D platform-survival game, built as a gameplay prototype for the Hitwicket game-developer challenge. The player walks across a chain of platforms ("pulpits") that appear, count down and disappear. Reaching new platforms earns points, which unlock a single jump and then a double jump. Falling ends the run. Normal mode has a target score and a victory screen; Endless mode keeps going. The game is playable in the browser as a WebGL build.</p>
+
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li><b>Movement</b> (<code>PlayerMovement.cs</code>). Rigidbody-based, camera-relative input, with the character rotated to face the direction of travel. Jumps are counted and gated by <code>ScoreManager</code>: no jump before the first threshold, then a single jump, then a double jump.</li>
+<li><b>Camera</b> (<code>ThirdPersonCamera.cs</code>). A spring-damper follow camera. Acceleration is stiffness × displacement − damping × velocity (stiffness 20, damping 2), integrated each frame, so the camera trails the player with momentum instead of snapping.</li>
+<li><b>Platforms</b> (<code>Pulpit.cs</code>, <code>PulpitSpawner.cs</code>). Each platform takes its lifetime from the JSON range and scales it as the score passes thresholds. It fades in and out with coroutines and shows a world-space countdown. Platform types are static, side-to-side, diagonal and up-down, and each type has its own material. The next platform spawns in a random direction other than back toward the previous one, before the current one disappears.</li>
+<li><b>Game flow.</b> <code>GameManager</code> handles modes, game over, victory and restart. <code>ScoreManager</code> handles scoring and unlock thresholds. <code>AudioManager</code> centralises music and effects.</li>
+<li><b>Configuration.</b> Player speed and platform timing load from <code>Resources/doofus_diary.json</code> through <code>DoofusDiaryLoader</code>, not from constants in code.</li>
+</ul>
+
+<h2 id="architecture">Architecture</h2>
+<pre><code>Assets/Scripts/
+  Audio/AudioManager.cs
+  Core/GameManager.cs, ScoreManager.cs
+  Data/DoofusDiaryLoader.cs, GameConfig.cs
+  Player/PlayerMovement.cs, ThirdPersonCamera.cs
+  Pulpits/Pulpit.cs, PulpitSpawner.cs, PulpitTrigger.cs
+  UI/BillboardUI.cs, StartScreenUI.cs, UnlockNotification.cs, …</code></pre>
+
+<h2 id="validation">Results</h2>
+<p>A playable WebGL build is hosted on GitHub Pages, and a gameplay recording is on YouTube (links above). There are no automated tests.</p>
+
+<h2 id="source">Source and references</h2>
+<ul class="plain">
+<li>Repository: <a href="https://github.com/xerfzy/HW_2026_Test">github.com/xerfzy/HW_2026_Test</a></li>
+<li>Related: <a href="https://github.com/xerfzy/Slot_Machine">Slot Machine</a> — Unity 6 three-reel slot machine made as an assignment: weighted symbol RNG, pixel-snapped reel animation, scripted croupier lines and a URP dither and Sobel post-process shader.</li>
+</ul>
+</main>
+<hr>
+<footer>
+<p><a href="https://github.com/xerfzy">GitHub</a> | <a href="mailto:srecibi9@gmail.com">Email</a> | <a href="../../resumes/">Resumes</a> | Last updated <time datetime="2026-10-31">31 Oct 2026</time></p>
+</footer>
+</body>
+</html>
