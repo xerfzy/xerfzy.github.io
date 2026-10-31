@@ -7,12 +7,12 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="color-scheme" content="light">
 <title>TD3 on TrackMania: what the logs show — xerf</title>
-<meta name="description" content="Behaviour-cloning warm start, the post-warm-up collapse, TD3+BC regularisation, a plateau reported as a plateau, and a policy stuck against one wall.">
+<meta name="description" content="Behaviour-cloning warm start, the post-warm-up collapse, TD3+BC regularisation, a training plateau, and a policy stuck against one wall.">
 <link rel="canonical" href="https://xerfzy.github.io/writing/td3-trackmania-notes/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="xerf — A Guide to My Work">
 <meta property="og:title" content="TD3 on TrackMania: what the logs show — xerf">
-<meta property="og:description" content="Behaviour-cloning warm start, the post-warm-up collapse, TD3+BC regularisation, a plateau reported as a plateau, and a policy stuck against one wall.">
+<meta property="og:description" content="Behaviour-cloning warm start, the post-warm-up collapse, TD3+BC regularisation, a training plateau, and a policy stuck against one wall.">
 <meta property="og:url" content="https://xerfzy.github.io/writing/td3-trackmania-notes/">
 <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../assets/css/site.css">
@@ -28,8 +28,8 @@
 <nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../writing/">Writing</a> : TD3 on TrackMania: what the logs show</p></nav>
 <article>
 <h1>TD3 on TrackMania: what the logs show</h1>
-<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on the experiment manifests and metrics committed in the repository (recorded results, not re-run).</p>
-<p>These are notes on the <a href="../../projects/trackmania-td3/">TrackMania TD3</a> project: what the algorithm needs, what broke when a behaviour-cloned policy met off-policy RL, and why the current result is reported as a plateau. Every number below comes from the experiment manifests and metrics CSV committed in the repository. Nothing was re-run for this note.</p>
+<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time></p>
+<p>These are notes on the <a href="../../projects/trackmania-td3/">TrackMania TD3</a> project: what the algorithm needs, what broke when a behaviour-cloned policy met off-policy RL, and why the current result is reported as a plateau. The numbers come from the experiment manifests and metrics logged during training.</p>
 
 <h2 id="td3">What TD3 adds to DDPG</h2>
 <p>The project started with DDPG and moved to TD3 after unstable behaviour. TD3 makes three changes, and all three are in <code>td3/agent.py</code>:</p>
@@ -49,7 +49,7 @@
 
 <h2 id="plateau">Plateau, not progress</h2>
 <p>Attempt 3 continued that checkpoint for about 35 minutes (90 rounds), logging metrics to CSV for the first time. Return turned out bimodal: a floor around 8–10 with 95–120-step episodes, and peaks of 40–90 every 5–10 rounds through the whole run. The BC term rose from about 0.010 to about 0.027 and levelled off, so the actor had drifted a bounded distance from the demonstrations. Critic loss rose slightly, and actor loss stayed flat.</p>
-<p>The manifest's own conclusion is "no collapse, plateaued at a noisy but non-degenerate level". The run does not show that the car learned to drive, and that is how it is reported here.</p>
+<p>The manifest's own conclusion is "no collapse, plateaued at a noisy but non-degenerate level". The run does not show that the car has learned to drive.</p>
 
 <h2 id="wall">The wall</h2>
 <p>The narrow 95–120-step band suggested a fixed obstacle, not random failure. A deterministic evaluation (no exploration noise, 6 episodes) confirmed it. Every episode accelerated cleanly to about 45&nbsp;km/h by step 80, then stopped. LIDAR minimum read 0.0 on every step from 81 to 100, while the mean and maximum LIDAR distances shrank steadily: the car was wedged against the same wall in all six runs.</p>

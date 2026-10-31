@@ -3,7 +3,6 @@
 #show: resume.with(
   subtitle: "Game Programmer",
   keywords: ("Unity", "C#", "Gameplay Programmer", "HLSL", "OpenGL", "Game AI"),
-  secondary-github: true,
 )
 
 Relevant coursework: Computer Graphics, Data Structures and Algorithms, Machine Learning.

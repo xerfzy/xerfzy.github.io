@@ -3,13 +3,12 @@
 #show: resume.with(
   subtitle: "Machine Learning Engineer",
   keywords: ("Machine Learning", "PyTorch", "Reinforcement Learning", "TD3", "DQN", "Computer Vision"),
-  secondary-github: true,
 )
 
 Relevant coursework: Machine Learning, Computer Vision, Data Structures and Algorithms.
 
 #section("Summary")
-B.Tech AI and ML student working on reinforcement learning and applied ML: a from-scratch TD3 agent with recorded experiments, a pixel-based DQN, image-classification comparisons, explainable retrieval, and on-device LLM inference on Android. Results are reported with their limitations.
+B.Tech AI and ML student working on reinforcement learning and applied ML: a from-scratch TD3 agent with recorded experiments, a pixel-based DQN, image-classification comparisons, explainable retrieval, and on-device LLM inference on Android.
 
 #section("Projects")
 

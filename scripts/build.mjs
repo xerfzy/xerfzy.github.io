@@ -395,7 +395,6 @@ ${items.join('\n')}
 <dt>Classification</dt><dd>${esc(r.classification)}</dd>
 <dt>Document</dt><dd><a href="${root}${r.pdf}">${esc(r.publicationNumber)} publication (PDF, ${pdfKB} KB)</a></dd>
 </dl>
-<p>${esc(r.titleNote)}</p>
 <p><b>Disclosure summary.</b> ${esc(r.abstract)}</p>
 ${rel ? `<p><b>Related engineering work:</b> <a href="${primaryHref(rel, root)}">${esc(rel.title)}</a>. ${esc(r.relatedNote)}</p>` : ''}
 </article>`;
@@ -428,10 +427,9 @@ ${researchProjects.map((p) => entry(p, root, { showCategory: true })).join('\n')
     body: `
 ${crumbs(root, [['Writing']])}
 <h1>Writing</h1>
-<p>Technical notes written from the projects' source and recorded results. Each note states what it is based on.</p>
 <ul class="entries">
 ${arts.map((a) => `<li><a class="t" href="${a.slug}/">${esc(a.title)}</a> — ${esc(a.summary)}
-<span class="meta">${time(a.date)} · ${esc(a.basis)}</span></li>`).join('\n')}
+<span class="meta">${time(a.date)}</span></li>`).join('\n')}
 </ul>
 <h2>Elsewhere</h2>
 <ul class="entries">
@@ -451,7 +449,7 @@ ${writing.external.map((x) => `<li><a class="t" href="${x.url}">${esc(x.title)}<
 ${crumbs(r2, [['Writing', 'writing/'], [a.title]])}
 <article>
 <h1>${esc(a.title)}</h1>
-<p class="meta">${time(a.date)} · ${esc(a.basis)}</p>
+<p class="meta">${time(a.date)}</p>
 ${read(`content/writing/${a.slug}.html`)}
 ${p ? `<p class="meta">Project: <a href="${primaryHref(p, r2)}">${esc(p.title)}</a></p>` : ''}
 </article>`,
@@ -489,10 +487,10 @@ ${read('content/pages/about.html')}`,
 {
   const items = resumes.map((r) => {
     const rel = `resumes/pdf/${r.file}`;
-    const label = esc(r.title) + (r.default ? ' <em>(default)</em>' : '');
+    const label = esc(r.title);
     if (!exists(rel)) return `<li>${label} — not generated yet.<span class="meta">${esc(r.focus)}</span></li>`;
     const kb = Math.round(fs.statSync(path.join(ROOT, rel)).size / 1024);
-    return `<li><a class="t" href="pdf/${r.file}">${esc(r.title)}</a>${r.default ? ' <em>(default)</em>' : ''} — PDF, ${kb} KB
+    return `<li><a class="t" href="pdf/${r.file}">${esc(r.title)}</a> — PDF, ${kb} KB
 <span class="meta">${esc(r.focus)}</span></li>`;
   });
   page({
@@ -503,11 +501,9 @@ ${read('content/pages/about.html')}`,
     body: `
 ${crumbs('../', [['Resumes']])}
 <h1>Resumes</h1>
-<p>${esc(cfg.fullName)}. Each resume is a one-column, text-based PDF that covers different projects for a different kind of role.</p>
 <ul class="entries">
 ${items.join('\n')}
-</ul>
-<p>Generated from Typst sources in the repository (<code>resumes/sources/</code>).</p>`,
+</ul>`,
   });
 }
 

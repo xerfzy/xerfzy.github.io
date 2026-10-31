@@ -15,7 +15,7 @@ C++ developer focused on native and GPU code: FFmpeg C API video processing, Ope
 #project("censface-cpp - video processing tool", "C++17, FFmpeg, OpenCV, CMake, Linux", "Oct 2026", url: repo("xerfzy/censface-cpp"))[
 - Implemented a single-pass pipeline on the FFmpeg C API: libavformat demux, libavcodec send/receive decode and encode with end-of-stream draining, libswscale YUV-to-BGR conversion with explicit colour matrix and range, and interleaved MP4 muxing.
 - Kept variable-frame-rate timing by encoding in the input stream's time base with per-frame timestamps and rescaling packets to the muxer's time base; stream-copied audio after checking MP4 codec support.
-- Wrapped every FFmpeg object in RAII unique_ptr deleters with atomic temp-file output and SIGINT handling; recorded checks show identical frame timestamps, byte-identical audio and flat peak memory (486 vs 490 MB for 6 s vs 29 s of 720p HEVC).
+- Wrapped every FFmpeg object in RAII unique_ptr deleters with atomic temp-file output and SIGINT handling; verified identical frame timestamps, byte-identical audio and flat peak memory (486 vs 490 MB for 6 s vs 29 s of 720p HEVC).
 ]
 
 #project("ChaCha20 GPU Image Encryption", "C++17, OpenGL 4.3, GLSL compute, SSBO", "Mar - May 2026", url: repo("xerfzy/chacha2020ImageEncryption_using_compute_shader"))[

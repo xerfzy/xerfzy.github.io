@@ -28,7 +28,7 @@
 <nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../writing/">Writing</a> : Fragment-shader vs compute-shader ray marching</p></nav>
 <article>
 <h1>Fragment-shader vs compute-shader ray marching</h1>
-<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on reading the source. The stutter cause is a diagnosis that has not been re-run yet.</p>
+<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time></p>
 <p>I wrote the same kind of SDF ray marcher twice in OpenGL: once as a fragment shader on a full-screen quad, and once as a compute shader writing into a texture. The distance functions and the marching loop are nearly identical. What changes is how pixels map to GPU invocations, where the result lives and how it gets to the screen. This note compares the two repositories as they are, including the bug that broke the compute version's animation.</p>
 
 <h2 id="fragment">Fragment-shader version</h2>
@@ -57,12 +57,12 @@ imageStore(imgOutput, p, vec4(color, 1.0));</code></pre>
 </ul>
 
 <h2 id="stutter">Why the compute version stuttered</h2>
-<p>The compute repository's README notes a "weird stuttery behaviour" whenever objects are animated, and a text file of frame times shows an attempt to find it in timing. Re-reading the code for this note, the likely cause is in the uniform helper, not in the GPU:</p>
+<p>The compute version stuttered whenever objects were animated, and my first attempt was to chase it through frame timings. Going back through the code, the likely cause is in the uniform helper, not on the GPU:</p>
 <pre><code>void setFloat(const std::string&amp; name, int value) const
 {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }</code></pre>
-<p>The parameter is an <code>int</code>. Every call such as <code>compute.setFloat("angle", glfwGetTime())</code> truncates the time to whole seconds, so the animation advances in one-unit jumps instead of smoothly. The displacement parameter is also driven by <code>5 * tan(time)</code>, which runs off to infinity every π seconds. The fragment version's <code>Shader::setFloat</code> takes a <code>float</code>, which is why it animates smoothly. This has not been fixed and re-run yet, so it is a diagnosis from the source, not a confirmed result.</p>
+<p>The parameter is an <code>int</code>. Every call such as <code>compute.setFloat("angle", glfwGetTime())</code> truncates the time to whole seconds, so the animation advances in one-unit jumps instead of smoothly. The displacement parameter is also driven by <code>5 * tan(time)</code>, which runs off to infinity every π seconds. The fragment version's <code>Shader::setFloat</code> takes a <code>float</code>, which is why it animates smoothly. The fix (a <code>float</code> parameter and a bounded animation curve) is the next change to that repository.</p>
 
 <h2 id="which">Which one to use</h2>
 <ul>

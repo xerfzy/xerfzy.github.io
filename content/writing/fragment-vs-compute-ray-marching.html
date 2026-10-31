@@ -26,12 +26,12 @@ imageStore(imgOutput, p, vec4(color, 1.0));</code></pre>
 </ul>
 
 <h2 id="stutter">Why the compute version stuttered</h2>
-<p>The compute repository's README notes a "weird stuttery behaviour" whenever objects are animated, and a text file of frame times shows an attempt to find it in timing. Re-reading the code for this note, the likely cause is in the uniform helper, not in the GPU:</p>
+<p>The compute version stuttered whenever objects were animated, and my first attempt was to chase it through frame timings. Going back through the code, the likely cause is in the uniform helper, not on the GPU:</p>
 <pre><code>void setFloat(const std::string&amp; name, int value) const
 {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }</code></pre>
-<p>The parameter is an <code>int</code>. Every call such as <code>compute.setFloat("angle", glfwGetTime())</code> truncates the time to whole seconds, so the animation advances in one-unit jumps instead of smoothly. The displacement parameter is also driven by <code>5 * tan(time)</code>, which runs off to infinity every π seconds. The fragment version's <code>Shader::setFloat</code> takes a <code>float</code>, which is why it animates smoothly. This has not been fixed and re-run yet, so it is a diagnosis from the source, not a confirmed result.</p>
+<p>The parameter is an <code>int</code>. Every call such as <code>compute.setFloat("angle", glfwGetTime())</code> truncates the time to whole seconds, so the animation advances in one-unit jumps instead of smoothly. The displacement parameter is also driven by <code>5 * tan(time)</code>, which runs off to infinity every π seconds. The fragment version's <code>Shader::setFloat</code> takes a <code>float</code>, which is why it animates smoothly. The fix (a <code>float</code> parameter and a bounded animation curve) is the next change to that repository.</p>
 
 <h2 id="which">Which one to use</h2>
 <ul>

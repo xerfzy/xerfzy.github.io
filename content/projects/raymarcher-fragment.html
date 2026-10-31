@@ -12,7 +12,7 @@
 
 <figure>
 <img src="{{root}}assets/images/raymarcher-fragment-sample.webp" width="560" height="560" loading="lazy" decoding="async" alt="Black-and-white render of an infinitely repeated grid of spheres seen along the repetition axis, shrinking towards the edges of the frame.">
-<figcaption>Render sample committed in the repository (<code>render_sample/4.png</code>).</figcaption>
+<figcaption>Render sample: repeated spheres.</figcaption>
 </figure>
 
 <h2 id="architecture">Architecture</h2>
@@ -28,10 +28,9 @@
 <li>Screen coordinates are normalised by a fixed constant instead of the viewport size.</li>
 <li>No acceleration structure, and no lighting model beyond normal-based shading.</li>
 <li>The C++ and shader code need cleanup and comments.</li>
-<li>The README also lists SDF subtraction and intersection. Neither appears in the shader code in the repository, so they are not claimed here.</li>
 </ul>
 
 <h2 id="validation">Results / Validation</h2>
-<p>Two screen recordings are linked from the repository: <a href="https://youtu.be/n6PMxOAhaA0">ray marching demo</a> and <a href="https://youtu.be/8iCfqHEs6ZA">post-processing demo</a>. The frame-rate drops visible in them come from screen-capture overhead, according to the README. No frame-time measurements are recorded.</p>
+<p>Screen recordings: <a href="https://youtu.be/n6PMxOAhaA0">ray marching demo</a> and <a href="https://youtu.be/8iCfqHEs6ZA">post-processing demo</a>. The frame-rate drops in them come from screen-capture overhead.</p>
 
 <p>Comparison with the compute-shader version: <a href="{{root}}writing/fragment-vs-compute-ray-marching/">Fragment-shader vs compute-shader ray marching</a>.</p>

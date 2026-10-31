@@ -4,7 +4,6 @@
       "id": "in202641060337",
       "kind": "Indian patent application (published)",
       "title": "A System for Swarm of Drone for Crowed Behaviour Analysis",
-      "titleNote": "Title as published, including the spelling \"Crowed\".",
       "status": "Published patent application. Not granted.",
       "applicationNumber": "202641060337",
       "publicationNumber": "IN202641060337 A1",
@@ -12,7 +11,10 @@
       "publicationDate": "2026-05-22",
       "journal": "Patent Office Journal No. 21/2026",
       "office": "Intellectual Property Office, India",
-      "inventors": ["Sre Cibi Varsshan K", "D Kavitha"],
+      "inventors": [
+        "Sre Cibi Varsshan K",
+        "D Kavitha"
+      ],
       "applicant": "Vellore Institute of Technology, Chennai",
       "classification": "B64C 39/02, G05D 1/10, G05D 1/00, G06N 3/00, G06V 20/13",
       "pdf": "assets/documents/IN202641060337A1.pdf",

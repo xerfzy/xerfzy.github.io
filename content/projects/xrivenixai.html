@@ -4,7 +4,7 @@
 <div class="figs">
 <figure>
 <img src="{{root}}assets/images/xrivenixai-chat.webp" width="240" height="536" loading="lazy" decoding="async" alt="Chat screen with Qwen 2.5 3B Instruct selected, showing a short conversation and a reply streaming in.">
-<figcaption>Chat (from the repository's screenshots).</figcaption>
+<figcaption>Chat.</figcaption>
 </figure>
 <figure>
 <img src="{{root}}assets/images/xrivenixai-memory.webp" width="240" height="536" loading="lazy" decoding="async" alt="Memory screen listing two automatically saved user facts, each with category, date and importance.">
@@ -29,7 +29,7 @@
 <p>Model loading, generation and extraction share one serialised native dispatcher, so only one chat model is ever in memory.</p>
 
 <h2 id="validation">Results / Validation</h2>
-<p>Measured by the author on a OnePlus Nord CE 3 5G (Snapdragon 782G, 8&nbsp;GB) with Qwen 2.5 3B Instruct Q4_K_M on 4 threads, as recorded in the README:</p>
+<p>Measured on a OnePlus Nord CE 3 5G (Snapdragon 782G, 8&nbsp;GB) with Qwen 2.5 3B Instruct Q4_K_M on 4 threads:</p>
 <ul>
 <li>Model load about 10–12&nbsp;s; resident memory about 3.2&nbsp;GB after load.</li>
 <li>Prompt processing about 15–20 tokens/s; generation about 5–6 tokens/s sustained over 5 × 128 tokens.</li>
@@ -39,7 +39,7 @@
 
 <h2 id="limitations">Limitations</h2>
 <ul>
-<li>CPU inference only. The README's thread sweep found 3 threads faster than the default 4, and the default has not been changed yet.</li>
+<li>CPU inference only. A thread sweep found 3 threads faster than the default 4; the default has not been changed yet.</li>
 <li>Android's default backup rules are left on, so app data can be included in a Google device backup if the user has that enabled.</li>
 <li>Distributed as an APK on GitHub, not through an app store.</li>
 </ul>

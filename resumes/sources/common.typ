@@ -12,9 +12,9 @@
   github-secondary: "github.com/thenamelessone888",
   // PLACEHOLDERS - fill in before sending if wanted; `none` hides the field.
   phone: none,     // e.g. "+91 XXXXX XXXXX"
-  linkedin: none,  // only a real profile URL, e.g. "linkedin.com/in/..."
+  linkedin: "linkedin.com/in/sre-cibi-varsshan-k-34149a287",
   location: none,  // e.g. "Chennai, India"
-  website: none,   // add "xerfzy.github.io" once the site is deployed there
+  website: "xerfzy.github.io",  // portfolio; live once the repo is renamed to xerfzy.github.io
 )
 
 #let education = (
@@ -26,7 +26,7 @@
 // Published patent application - never described as granted.
 #let patent-entry = [
   *Indian Patent Application IN202641060337 A1* (published application, not granted) | May 2026 \
-  "A System for Swarm of Drone for Crowed Behaviour Analysis" (title as published). Application No. 202641060337, filed 12 May 2026, published 22 May 2026. Inventors: Sre Cibi Varsshan K, D Kavitha. Applicant: Vellore Institute of Technology, Chennai.
+  "A System for Swarm of Drone for Crowed Behaviour Analysis". Application No. 202641060337, filed 12 May 2026, published 22 May 2026. Inventors: Sre Cibi Varsshan K, D Kavitha. Applicant: Vellore Institute of Technology, Chennai.
 ]
 
 // "github.com/user/repo" shown as text, linked over https.

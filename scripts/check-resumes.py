@@ -20,6 +20,7 @@ EXPECTED = [
 ]
 HEADINGS = ["EDUCATION", "SUMMARY", "PROJECTS", "RESEARCH", "TECHNICAL SKILLS"]
 REQUIRED = ["Sre Cibi Varsshan K", "srecibi9@gmail.com", "github.com/xerfzy",
+            "linkedin.com/in/sre-cibi-varsshan-k-34149a287", "xerfzy.github.io",
             "Vellore Institute of Technology, Chennai", "Expected 2027",
             "IN202641060337 A1", "not granted"]
 FORBIDDEN = [r"(?i)\borion\b",

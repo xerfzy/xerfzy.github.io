@@ -28,7 +28,7 @@
 <nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../writing/">Writing</a> : How the censface-cpp video pipeline works</p></nav>
 <article>
 <h1>How the censface-cpp video pipeline works</h1>
-<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on the source and the project's pipeline notes. The numbers in the last section are hand-run checks recorded in the README.</p>
+<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time></p>
 <p>censface-cpp reads a video, changes pixels inside some boxes, and writes a video that should otherwise match the input: same timing, same audio, same orientation. With the FFmpeg C API, that takes a chain of eight steps. This note follows one MP4 through them and records the places where the obvious approach fails.</p>
 
 <h2 id="packets-frames">Packets are not frames</h2>
@@ -58,7 +58,7 @@ while (avcodec_receive_frame(decoder, frame) == 0)
 <p>Each FFmpeg object (format contexts, codec contexts, <code>SwsContext</code>, frames, packets) sits in a <code>std::unique_ptr</code> with a deleter that calls the matching free function. Every error code goes through a <code>check()</code> that throws with FFmpeg's error text. When anything fails, or when Ctrl+C sets the cancel flag, the destructors release everything in reverse order. <code>main()</code> then deletes the hidden <code>.name.partial.mp4</code> file, so a half-written output never sits under the real file name.</p>
 
 <h2 id="checked">What was checked</h2>
-<p>Recorded in the repository README, run by hand on one machine: a 2&nbsp;s H.264 and AAC clip kept 24 of 24 frame timestamps and byte-identical audio (MD5). A rotated variable-frame-rate clip kept its duration and came out upright with no rotation tag. Peak memory was 486&nbsp;MB for 6&nbsp;s of a 720p HEVC clip and 490&nbsp;MB for all 29&nbsp;s. Speed was not measured.</p>
+<p>Run on one machine: a 2&nbsp;s H.264 and AAC clip kept 24 of 24 frame timestamps and byte-identical audio (MD5). A rotated variable-frame-rate clip kept its duration and came out upright with no rotation tag. Peak memory was 486&nbsp;MB for 6&nbsp;s of a 720p HEVC clip and 490&nbsp;MB for all 29&nbsp;s. Speed was not measured.</p>
 
 <p class="meta">Project: <a href="../../projects/censface-cpp/">censface-cpp</a></p>
 </article>

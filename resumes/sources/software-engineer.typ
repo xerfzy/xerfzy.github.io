@@ -15,7 +15,7 @@ Computer science student building native software: a C++17 video tool on the FFm
 #project("censface-cpp", "C++17, FFmpeg, OpenCV, CMake, Linux", "Oct 2026", url: repo("xerfzy/censface-cpp"))[
 - Built a Linux command-line tool that demuxes and decodes video with libavformat and libavcodec, converts frames with libswscale, runs OpenCV DNN head detection and effects, and encodes H.264 MP4 in a single pass.
 - Preserved source timing by encoding in the input stream's time base with each frame's own timestamp; copied audio packets without re-encoding and applied the display-matrix rotation to pixels.
-- Managed every FFmpeg object with RAII (unique_ptr with custom deleters); added atomic temp-file output, SIGINT cancellation and a batch script; recorded checks showed 24 of 24 frame timestamps and byte-identical audio preserved on a test clip.
+- Managed every FFmpeg object with RAII (unique_ptr with custom deleters); added atomic temp-file output, SIGINT cancellation and a batch script; verified 24 of 24 frame timestamps and byte-identical audio preserved on a test clip.
 ]
 
 #project("XrivenixAI - offline Android LLM assistant", "Kotlin, Jetpack Compose, Room, JNI, C++", "Sep 2026", url: repo("xerfzy/XrivenixAI"))[

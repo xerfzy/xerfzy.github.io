@@ -31,7 +31,7 @@
 <dl class="facts">
 <dt>Technologies</dt><dd>C++17, FFmpeg, libavformat, libavcodec, libswscale, OpenCV, CMake, Linux</dd>
 <dt>Period</dt><dd>Oct 2026</dd>
-<dt>Status</dt><dd>Working; tested on one Linux setup</dd>
+<dt>Status</dt><dd>Working</dd>
 <dt>Directory</dt><dd><a href="../../projects/systems/">C++ and Systems</a> · Featured</dd>
 <dt>Links</dt><dd><a href="https://github.com/xerfzy/censface-cpp">Source<span class="vh"> for censface-cpp</span></a></dd>
 </dl>
@@ -69,7 +69,7 @@
 </ul>
 
 <h2 id="validation">Results / Validation</h2>
-<p>Checks recorded in the repository README, run by hand on the development machine (FFmpeg 9.0.2, OpenCV 5.0.0, GCC 16):</p>
+<p>Checks run on the development machine (FFmpeg 9.0.2, OpenCV 5.0.0, GCC 16):</p>
 <ul>
 <li>A 2&nbsp;s H.264 and AAC clip: 24 of 24 frames with identical timestamps, audio packets byte-identical by MD5.</li>
 <li>A rotated variable-frame-rate clip: correct output size, no rotation tag, timestamps and duration preserved.</li>

@@ -7,12 +7,12 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="color-scheme" content="light">
 <title>ChaCha20 on an OpenGL compute shader — xerf</title>
-<meta name="description" content="Mapping keystream blocks to compute invocations and an SSBO, plus three problems found on re-reading: dispatch size, unsigned uniforms set with a signed call, and no integrity.">
+<meta name="description" content="Mapping keystream blocks to compute invocations and an SSBO, and three things to fix: dispatch size, unsigned uniforms set with a signed call, and missing integrity protection.">
 <link rel="canonical" href="https://xerfzy.github.io/writing/chacha20-on-the-gpu/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="xerf — A Guide to My Work">
 <meta property="og:title" content="ChaCha20 on an OpenGL compute shader — xerf">
-<meta property="og:description" content="Mapping keystream blocks to compute invocations and an SSBO, plus three problems found on re-reading: dispatch size, unsigned uniforms set with a signed call, and no integrity.">
+<meta property="og:description" content="Mapping keystream blocks to compute invocations and an SSBO, and three things to fix: dispatch size, unsigned uniforms set with a signed call, and missing integrity protection.">
 <meta property="og:url" content="https://xerfzy.github.io/writing/chacha20-on-the-gpu/">
 <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../assets/css/site.css">
@@ -28,7 +28,7 @@
 <nav class="crumbs" aria-label="Breadcrumb"><p><a href="../../">Top</a> : <a href="../../writing/">Writing</a> : ChaCha20 on an OpenGL compute shader</p></nav>
 <article>
 <h1>ChaCha20 on an OpenGL compute shader</h1>
-<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time> · Based on reading the source. Nothing was re-run.</p>
+<p class="meta"><time datetime="2026-10-31">31 Oct 2026</time></p>
 <p>ChaCha20 suits a GPU. Its keystream is a sequence of independent 64-byte blocks, each a pure function of the key, nonce and block counter, built from 32-bit add, rotate and XOR. Any thread can compute any block without talking to another thread. This note walks through how the <a href="../../projects/chacha20-gpu-encryption/">ChaCha20 GPU Image Encryption</a> project maps that onto an OpenGL compute shader. It also covers three problems that turned up when re-reading the code: one is cosmetic, one concerns performance, and one concerns correctness.</p>
 
 <h2 id="state">The state and the quarter-round</h2>

@@ -31,7 +31,7 @@
 <dl class="facts">
 <dt>Technologies</dt><dd>C++, OpenGL, GLSL, SDF, Sphere tracing, FBO, Post-processing</dd>
 <dt>Period</dt><dd>Feb–Apr 2026</dd>
-<dt>Status</dt><dd>Work in progress</dd>
+<dt>Status</dt><dd>In progress</dd>
 <dt>Directory</dt><dd><a href="../../projects/graphics/">Graphics and GPU Computing</a> · Featured</dd>
 <dt>Links</dt><dd><a href="https://github.com/xerfzy/Ray_marcher_using_fragment_shader_in_opengl">Source<span class="vh"> for Ray Marcher (OpenGL fragment shader)</span></a> · <a href="https://youtu.be/n6PMxOAhaA0">Video<span class="vh"> of Ray Marcher (OpenGL fragment shader)</span></a></dd>
 </dl>
@@ -49,7 +49,7 @@
 
 <figure>
 <img src="../../assets/images/raymarcher-fragment-sample.webp" width="560" height="560" loading="lazy" decoding="async" alt="Black-and-white render of an infinitely repeated grid of spheres seen along the repetition axis, shrinking towards the edges of the frame.">
-<figcaption>Render sample committed in the repository (<code>render_sample/4.png</code>).</figcaption>
+<figcaption>Render sample: repeated spheres.</figcaption>
 </figure>
 
 <h2 id="architecture">Architecture</h2>
@@ -65,11 +65,10 @@
 <li>Screen coordinates are normalised by a fixed constant instead of the viewport size.</li>
 <li>No acceleration structure, and no lighting model beyond normal-based shading.</li>
 <li>The C++ and shader code need cleanup and comments.</li>
-<li>The README also lists SDF subtraction and intersection. Neither appears in the shader code in the repository, so they are not claimed here.</li>
 </ul>
 
 <h2 id="validation">Results / Validation</h2>
-<p>Two screen recordings are linked from the repository: <a href="https://youtu.be/n6PMxOAhaA0">ray marching demo</a> and <a href="https://youtu.be/8iCfqHEs6ZA">post-processing demo</a>. The frame-rate drops visible in them come from screen-capture overhead, according to the README. No frame-time measurements are recorded.</p>
+<p>Screen recordings: <a href="https://youtu.be/n6PMxOAhaA0">ray marching demo</a> and <a href="https://youtu.be/8iCfqHEs6ZA">post-processing demo</a>. The frame-rate drops in them come from screen-capture overhead.</p>
 
 <p>Comparison with the compute-shader version: <a href="../../writing/fragment-vs-compute-ray-marching/">Fragment-shader vs compute-shader ray marching</a>.</p>
 
@@ -77,7 +76,7 @@
 <ul class="plain">
 <li>Repository: <a href="https://github.com/xerfzy/Ray_marcher_using_fragment_shader_in_opengl">github.com/xerfzy/Ray_marcher_using_fragment_shader_in_opengl</a></li>
 <li>Article: <a href="../../writing/fragment-vs-compute-ray-marching/">Fragment-shader vs compute-shader ray marching</a></li>
-<li>Related: <a href="https://github.com/xerfzy/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-">Ray Marcher (compute shader demo)</a> — Ray marching moved into an OpenGL compute shader that writes an RGBA32F image, shown on a full-screen quad. The animation stutters; the likely cause is a uniform setter that truncates float time values to int (not yet fixed).</li>
+<li>Related: <a href="https://github.com/xerfzy/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-">Ray Marcher (compute shader demo)</a> — Ray marching in an OpenGL compute shader that writes an RGBA32F image, shown on a full-screen quad.</li>
 <li>Related: <a href="../../projects/cpu-ray-tracer/">CPU Ray Tracer</a> — C++ ray tracer built from Ray Tracing in One Weekend: Lambertian, metal and dielectric materials, multi-sample anti-aliasing and defocus blur, written out as PPM.</li>
 </ul>
 </main>

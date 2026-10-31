@@ -72,7 +72,7 @@ await Promise.all(Array.from({ length: 6 }, async () => {
     const entry = { url: u, ...r, from: [...urls.get(u)].slice(0, 3) };
     if (r.status >= 200 && r.status < 400) results.ok.push(entry);
     else if ([404, 410].includes(r.status)) results.broken.push(entry);
-    else if ([401, 403, 429].includes(r.status)) results.blocked.push(entry);
+    else if ([401, 403, 429, 999].includes(r.status)) results.blocked.push(entry); // 999: LinkedIn bot block
     else if (r.status === 0) results.network.push(entry);
     else results.other.push(entry);
   }

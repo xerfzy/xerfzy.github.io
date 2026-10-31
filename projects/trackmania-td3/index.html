@@ -31,13 +31,13 @@
 <dl class="facts">
 <dt>Technologies</dt><dd>Python, PyTorch, TD3, Actor–critic, TMRL, Behaviour cloning, pytest</dd>
 <dt>Period</dt><dd>Sep 2026</dd>
-<dt>Status</dt><dd>Research in progress</dd>
+<dt>Status</dt><dd>In progress</dd>
 <dt>Directory</dt><dd><a href="../../projects/ai/">AI and Machine Learning</a> · Research</dd>
 <dt>Links</dt><dd><a href="https://github.com/thenamelessone888/RL">Source<span class="vh"> for TrackMania TD3</span></a></dd>
 </dl>
 <h2 id="overview">Overview</h2>
 <p>A research project that trains a continuous-control driving agent for TrackMania 2020. TD3 (Fujimoto, van Hoof and Meger, 2018) is implemented from scratch on top of <a href="https://github.com/trackmania-rl/tmrl">TMRL</a> 0.7.1. Only TMRL's environment, networking, replay-memory format and extension points are reused. TMRL's own SAC and REDQ are not used. Observations are LIDAR rays plus speed, and the agent starts from a policy behaviour-cloned from recorded human driving.</p>
-<p>The repository records each experiment with a manifest: date, config, what happened and what it does not prove. Those manifests are the source for the results below.</p>
+<p>Each experiment is logged with a manifest: date, config, what happened and what it does not prove.</p>
 
 <h2 id="implementation">Implementation</h2>
 <ul>

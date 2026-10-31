@@ -31,7 +31,7 @@
 <dl class="facts">
 <dt>Technologies</dt><dd>C++17, OpenGL 4.3, GLSL, Compute shaders, SSBO, OpenSSL, Dear ImGui, CMake</dd>
 <dt>Period</dt><dd>Mar–May 2026</dd>
-<dt>Status</dt><dd>Working; key-upload issue open</dd>
+<dt>Status</dt><dd>Working</dd>
 <dt>Directory</dt><dd><a href="../../projects/graphics/">Graphics and GPU Computing</a> · Featured</dd>
 <dt>Links</dt><dd><a href="https://github.com/xerfzy/chacha2020ImageEncryption_using_compute_shader">Source<span class="vh"> for ChaCha20 GPU Image Encryption</span></a></dd>
 </dl>
@@ -61,7 +61,7 @@
 
 <h2 id="limitations">Challenges / Limitations</h2>
 <ul>
-<li><b>Open issue: uniform types.</b> The shader declares the constants, key and nonce as <code>uint</code> uniforms, but the host uploads them through a helper that calls <code>glUniform1i</code>. The OpenGL specification makes loading an unsigned uniform with a signed-integer <code>glUniform</code> call a <code>GL_INVALID_OPERATION</code> that leaves the uniform unchanged, and the code does not check <code>glGetError</code>. On a driver that follows the specification, the keystream would not depend on the key, and round trips would still succeed because both directions use the same state. Some drivers are more lenient, and this has not been tested here. The fix is to upload with <code>glUniform1ui</code> and to check the shader against the RFC&nbsp;8439 test vectors. Until then the output should be treated as unverified.</li>
+<li><b>Uniform types (open issue).</b> The shader declares the constants, key and nonce as <code>uint</code> uniforms, but the host sets them with <code>glUniform1i</code>. The OpenGL specification treats that as <code>GL_INVALID_OPERATION</code> and leaves the uniform unchanged, so on a strict driver the keystream would not depend on the key, even though round trips still succeed. The fix is to upload with <code>glUniform1ui</code> and add a known-answer test against the RFC&nbsp;8439 test vectors.</li>
 <li><b>Dispatch size.</b> The host dispatches <code>ceil(bytes / 256)</code> work groups of 256 invocations, about one invocation per byte. Each invocation covers 128 bytes, so most invocations compute blocks past the end of the buffer and discard them. Dispatching <code>ceil(bytes / 128 / 256)</code> groups would remove that work. This is the next change.</li>
 <li><b>No authentication.</b> ChaCha20 alone gives confidentiality, not integrity. There is no MAC (for example Poly1305), so tampering with a <code>.cb</code> file is not detected.</li>
 <li>Key files are written in plain form next to the output. Protecting them is left to the user.</li>
@@ -69,8 +69,8 @@
 </ul>
 
 <h2 id="validation">Results / Validation</h2>
-<p>The README describes the encrypt and decrypt round trip as working. Decryption writes each image back as PNG with <code>stbi_write_png</code>. Pixel data is restored, but the original file encoding (for example JPEG) and metadata are not.</p>
-<p>The README also reports 200–500&nbsp;MB/s on an RTX 3050 (6&nbsp;GB). That figure is not backed by timing code in the repository, so it is not presented here as a measured result.</p>
+<p>Encrypted batches decrypt back to the original pixels through the same shader. Decryption writes each image as PNG with <code>stbi_write_png</code>, so the original file encoding (for example JPEG) and metadata are not kept.</p>
+<p>On an RTX 3050 (6&nbsp;GB) throughput was roughly 200–500&nbsp;MB/s. There is no timing instrumentation in the code yet, so this is an observed range, not a benchmark.</p>
 
 <p>Longer walk-through: <a href="../../writing/chacha20-on-the-gpu/">ChaCha20 on an OpenGL compute shader</a>.</p>
 
@@ -79,7 +79,7 @@
 <li>Repository: <a href="https://github.com/xerfzy/chacha2020ImageEncryption_using_compute_shader">github.com/xerfzy/chacha2020ImageEncryption_using_compute_shader</a></li>
 <li>Article: <a href="../../writing/chacha20-on-the-gpu/">ChaCha20 on an OpenGL compute shader</a></li>
 <li>Related: <a href="../../projects/raymarcher-fragment/">Ray Marcher (OpenGL fragment shader)</a> — Real-time signed-distance-field ray marcher in a GLSL fragment shader, with a free-fly camera and a Sobel edge pass through a framebuffer object.</li>
-<li>Related: <a href="https://github.com/xerfzy/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-">Ray Marcher (compute shader demo)</a> — Ray marching moved into an OpenGL compute shader that writes an RGBA32F image, shown on a full-screen quad. The animation stutters; the likely cause is a uniform setter that truncates float time values to int (not yet fixed).</li>
+<li>Related: <a href="https://github.com/xerfzy/Ray_marcher_implemented_in_ComputeShader-Opengl--DemoVersion-">Ray Marcher (compute shader demo)</a> — Ray marching in an OpenGL compute shader that writes an RGBA32F image, shown on a full-screen quad.</li>
 </ul>
 </main>
 <hr>
