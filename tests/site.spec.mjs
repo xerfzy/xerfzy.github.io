@@ -46,6 +46,30 @@ for (const [name, path] of Object.entries(PAGES)) {
   });
 }
 
+// Phones and docks cover the bottom of the screen, so on long pages the footer must
+// end well above the viewport edge, and "Last updated <date>" must not split.
+test('footer clears the bottom edge on long pages and keeps the date on one line', async ({ browser }) => {
+  for (const [width, height] of [[320, 568], [360, 740], [390, 844], [1366, 768]]) {
+    const ctx = await browser.newContext({ viewport: { width, height }, isMobile: width < 800, hasTouch: width < 800 });
+    const page = await ctx.newPage();
+    for (const path of ['projects/', 'experiments/', 'writing/chacha20-on-the-gpu/']) {
+      await page.goto(path);
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      const m = await page.evaluate(() => {
+        const nw = document.createRange();
+        nw.selectNodeContents(document.querySelector('footer .nw'));
+        return {
+          clear: innerHeight - document.querySelector('footer p').getBoundingClientRect().bottom,
+          lines: new Set([...nw.getClientRects()].map((r) => Math.round(r.top))).size,
+        };
+      });
+      expect(m.clear, `${path} at ${width}x${height}`).toBeGreaterThanOrEqual(60);
+      expect(m.lines, `${path} at ${width}x${height}`).toBe(1);
+    }
+    await ctx.close();
+  }
+});
+
 test('screenshots of representative pages (docs/screenshots)', async ({ page }) => {
   fs.mkdirSync('docs/screenshots', { recursive: true });
   for (const name of ['home', 'category', 'detail', 'detail-images', 'experiments', 'research', 'article', 'resumes']) {
@@ -93,6 +117,17 @@ test('experiments filter narrows the list and is hidden without JavaScript', asy
   await expect(nojs.locator('#filter')).toBeHidden();
   await expect(nojs.locator('#list > li:visible')).toHaveCount(total);
   await ctx.close();
+});
+
+test('filter controls are at least 16px on phones (iOS Safari zooms on smaller inputs)', async ({ page }) => {
+  for (const width of [320, 360, 390, 414]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('experiments/');
+    for (const id of ['#q', '#cat']) {
+      const px = await page.locator(id).evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+      expect(px, `${id} at ${width}px`).toBeGreaterThanOrEqual(16);
+    }
+  }
 });
 
 test('resume and patent PDFs download as PDFs', async ({ page, request }) => {
