@@ -23,7 +23,7 @@ The seven requested categories are kept unchanged. Each project has exactly one 
 |---|---|---|
 | C++ and Systems | censface-cpp, eos-oneplus-nord, DSA_H | eos-oneplus-nord is Bash/Linux tooling for Android devices. It is filed under systems because the work is Linux-side verification, not app development. |
 | Graphics and GPU Computing | ChaCha20 GPU encryption, both ray marchers, CPU ray tracer, learning-vulkan, learning-opengl | ChaCha20 is filed here, not under security: the engineering is the GPU compute mapping. |
-| Android and Mobile | XrivenixAI, AgriEdge | XrivenixAI runs an LLM, but it is an Android app first (as the brief requires). |
+| Android and Mobile | XrivenixAI, Censface, AgriEdge | XrivenixAI runs an LLM, but it is an Android app first (as the brief requires). |
 | Games and Interactive Software | Doofus Diary, Slot Machine, FPS controller | |
 | AI and Machine Learning | TrackMania TD3, Space Shooter DQN, Legal Case Similarity (xai-v2), Breast Cancer classification, Image Guessing Game | **Image-gen moved here from "Web and experiments".** Its code runs a local Stable Diffusion pipeline and embedding-similarity scoring; the Flask front end is incidental. |
 | Robotics and Embedded Systems | Multi-UAV Monitoring Prototype, ESP32-CAM ORB Features | |
@@ -34,7 +34,7 @@ The seven requested categories are kept unchanged. Each project has exactly one 
 - **Research:**
   - TrackMania TD3, which has research-style experiment manifests;
   - the Multi-UAV prototype, which is related engineering work for the published patent application.
-- **Project:** CPU ray tracer (guided by a book), AgriEdge (team), Doofus Diary, Slot Machine.
+- **Project:** CPU ray tracer (guided by a book), Censface, AgriEdge (team), Doofus Diary, Slot Machine.
 - **Coursework:** Space Shooter DQN (a course review PDF is committed), Breast Cancer classification (a report is committed), Knapsack Visualisation.
 - **Experiment:** compute-shader ray marcher, learning-vulkan, learning-opengl, FPS controller, xai-v2, ESP32 ORB.
 - **Archive:** DSA_H (team fork), Image Guessing Game, Novr (team).

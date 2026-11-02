@@ -162,6 +162,16 @@ Authorship: commits under earlier handles of the same owner are counted as this 
 - Distribution: APK in `releases/` [S]. Not on Google Play.
 - Limitations [R]: CPU-only inference; 3 of 12 catalog models tested on a device; Android backup not restricted.
 
+### Censface: Project, no detail page
+- Repo: https://github.com/xerfzy/censface. Kotlin (Android app) and Python (reference CLI). Published 2026-11-02 (one commit); validation notes dated 2026-10-24. Added to this audit 2026-11-02.
+- Android [S]: Jetpack Compose UI; ONNX Runtime Android 1.24.3 loading the bundled `head-nano.onnx` head model and a person-segmentation model; eight filters in `FaceFilter` (glitch, cyberpunk, pixelate, blur, neon, liquid, comic, sketch), applied to detected heads or the entire frame.
+- Head model is a YOLOv8 nano head detector [R] (README and model NOTICE).
+- Video [S]: MediaExtractor, MediaCodec and MediaMuxer; effects drawn with OpenGL ES (`GLES20`/`EGL14`) into the encoder's `createInputSurface()`; export in a foreground service typed `dataSync|mediaProcessing`. Compressed audio is copied unchanged [R].
+- Manifest [S]: Internet and network-state permissions removed with `tools:node="remove"`; no camera permission. Min SDK 24, target SDK 36, ARM64 only, version 1.2. A debug APK is committed in `artifacts/` with SHA-256 sums.
+- Python [S]: `cv2.dnn.readNetFromONNX` with the same models, PyAV for frames, FFmpeg for the audio copy.
+- Tested on a OnePlus Nord AC2001, Android 12 [R]: one unit test, lint, six on-device smoke checks.
+- Limitations [R]: artistic effects, not guaranteed anonymization; heads can be missed under occlusion, at small sizes or with motion blur.
+
 ### AgriEdge (team project): Project, no detail page
 - Repo: https://github.com/xerfzy/AgriEdge. **Fork** of a teammate's repository; 32 commits, 27 by this author.
 - The project report lists a three-person team, submitted October 2026.

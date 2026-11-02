@@ -9,7 +9,6 @@ A static portfolio laid out as a plain web directory. It is plain HTML, one styl
 ```
 index.html                      homepage (directory + counts + recently updated)
 about/index.html                About
-whats-new/index.html            What's New
 projects/index.html             all projects
 projects/<category>/index.html  one page per category (systems, graphics, mobile, games, ai, robotics, web)
 projects/<slug>/index.html      project detail pages
@@ -50,7 +49,7 @@ Use a local server rather than opening files directly. Links point at folders (`
 - **A project.** Add an `<li id="slug">` entry to its category page (`projects/<category>/index.html`) and to `projects/index.html`. Raise that category's `(n)` on the homepage by one. If it is an experiment, coursework or archive entry, also add it to `experiments/index.html` and raise the Experiments and Archive count.
 - **A detail page.** Copy an existing `projects/<slug>/index.html` to a new folder, change the text, link to it, and add its URL to `sitemap.xml`. Images go in `assets/images/` as WebP, with `width`, `height`, `alt` and `loading="lazy"`.
 - **An article.** Copy an existing `writing/<slug>/index.html`, link it from `writing/index.html`, and add it to `sitemap.xml`.
-- **An update.** Add a dated `<li>` at the top of `whats-new/index.html`, and to "Recently updated" on the homepage if it should show there.
+- **An update.** Add a dated `<li>` at the top of "Recently updated" on the homepage.
 - **A resume.** See `resumes/README.md`.
 
 `node scripts/check.mjs` catches the usual slips: a homepage count that doesn't match its page, a page missing from the sitemap, a broken link or anchor, invalid HTML.

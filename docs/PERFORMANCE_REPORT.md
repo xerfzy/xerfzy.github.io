@@ -50,8 +50,8 @@ The earlier run before two fixes had SEO 92 on every page and CLS 0.064 on Exper
 
 31 tests, all passing:
 
-- **Overflow.** No horizontal overflow on 13 page types (all page kinds, including 404) at 320, 360, 375, 390, 414, 768, 1024, 1366 and 1920 px.
-- **Accessibility.** axe-core (WCAG 2.0/2.1/2.2 A and AA plus best-practice rules) reports **0 violations** on all 13 page types.
+- **Overflow.** No horizontal overflow on 12 page types (all page kinds, including 404) at 320, 360, 375, 390, 414, 768, 1024, 1366 and 1920 px.
+- **Accessibility.** axe-core (WCAG 2.0/2.1/2.2 A and AA plus best-practice rules) reports **0 violations** on all 12 page types.
 - **Console.** No console errors and no CSP violations on any page.
 - **Keyboard.** Tab order on the homepage is: skip link → site title → the six navigation links in order. The focused element has a visible outline.
 - **Filter.** The experiments filter narrows the list by text and by category. With JavaScript disabled, the controls stay hidden and all 12 entries are shown.

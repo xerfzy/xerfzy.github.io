@@ -15,7 +15,6 @@ const PAGES = {
   research: 'research/',
   writing: 'writing/',
   article: 'writing/chacha20-on-the-gpu/',
-  whatsnew: 'whats-new/',
   about: 'about/',
   resumes: 'resumes/',
   notfound: '404.html',
@@ -90,11 +89,11 @@ test('screenshots of representative pages (docs/screenshots)', async ({ page }) 
 test('keyboard: skip link first, then title, then navigation in order', async ({ page }) => {
   await page.goto('');
   const order = [];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 7; i++) {
     await page.keyboard.press('Tab');
     order.push(await page.evaluate(() => document.activeElement.textContent.trim()));
   }
-  expect(order).toEqual(['Skip to content', 'xerf', "What's New?", 'Projects', 'Experiments', 'Writing', 'About', 'Resumes']);
+  expect(order).toEqual(['Skip to content', 'xerf', 'Projects', 'Experiments', 'Writing', 'About', 'Resumes']);
   const outline = await page.evaluate(() => getComputedStyle(document.activeElement).outlineStyle);
   expect(outline).not.toBe('none');
 });
@@ -149,7 +148,7 @@ test('homepage has the required wording and no introduction paragraph', async ({
   await page.goto('');
   await expect(page.locator('h1')).toHaveText('xerf');
   await expect(page.locator('.tagline')).toHaveText('KISP — Keep It Secure, Performant.');
-  await expect(page.locator('nav.main')).toHaveText("[ What's New? | Projects | Experiments | Writing | About | Resumes ]");
+  await expect(page.locator('nav.main')).toHaveText('[ Projects | Experiments | Writing | About | Resumes ]');
   expect(await page.locator('main p').count()).toBe(0);
   expect(await page.locator('img, canvas, video').count()).toBe(0);
 });
