@@ -1,9 +1,5 @@
 # xerf
 
-KISP — Keep It Secure, Performant.
-
-A static portfolio laid out as a plain web directory. It is plain HTML, one stylesheet and one small script: no build step, no frameworks, no web fonts, no trackers. Every page is a normal `.html` file that you edit directly.
-
 ## Where things are
 
 ```
