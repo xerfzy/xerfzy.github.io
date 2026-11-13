@@ -17,6 +17,7 @@ const PAGES = {
   article: 'writing/chacha20-on-the-gpu/',
   about: 'about/',
   resumes: 'resumes/',
+  'reaper-privacy': 'reaper/privacy/',
   notfound: '404.html',
 };
 const WIDTHS = [320, 360, 375, 390, 414, 768, 1024, 1366, 1920];
